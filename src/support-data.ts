@@ -106,28 +106,42 @@ export const articles: SupportArticle[] = [
     "videoUrl": null
   },
   {
-    "id": "rotate-pip",
-    "question": "How do I rotate Picture in Picture for landscape recording on iPhone?",
-    "category": "Floating window",
-    "platforms": [
-      "iOS",
-      "iPadOS"
-    ],
-    "answer": "<p>The native Camera app does not rotate its entire interface when you turn your device, so the floating text can stay in portrait.</p><ol><li>Open <strong>VoicePrompter → Settings → Picture in Picture</strong>.</li><li>Use the option to <strong>force rotate the content</strong> of the floating window.</li><li>Return to the Camera app and check that the text faces the right way for your landscape recording.</li></ol><p>This rotates the text inside Picture in Picture.</p>",
-    "searchPhrases": ["text is sideways", "floating window won't rotate", "turn text horizontal"],
-    "keywords": "pip sideways horizontal landscape native camera rotation orientation",
-    "videoUrl": null
-  },
-  {
-    "id": "transparent-pip",
-    "question": "Can I make the floating Picture in Picture window transparent?",
+    "id": "floating-window",
+    "question": "What is Picture in Picture, or the floating script window?",
     "category": "Floating window",
     "platforms": [
       "android",
       "iOS",
       "iPadOS"
     ],
-    "answer": "<p>No. Making the floating Picture in Picture window transparent is not technically supported on iOS or Android.</p><p>This is different from the script background inside VoicePrompter’s built-in Video mode. The background controls there do not make the external floating window transparent.</p>",
+    "answer": "<p><strong>Picture in Picture (PiP)</strong> is the small floating window that shows your script over another app. For example, you can read your text while filming with your phone’s Camera app.</p><p>If you think of it as a text box, script overlay, or floating teleprompter, this is the same feature. It is different from <strong>Video mode</strong>, where you record inside VoicePrompter.</p><p>On iPhone or iPad, if the floating text faces the wrong way when filming horizontally, see <a href=\"#rotate-pip\">how to rotate the floating script window</a>.</p>",
+    "keywords": "pip picture in picture floating text script window overlay box bubble teleprompter another app camera",
+    "searchPhrases": ["text over the camera", "script on top of another app", "small floating window"],
+    "videoUrl": null
+  },
+  {
+    "id": "rotate-pip",
+    "question": "How do I rotate the floating script window for landscape recording on iPhone or iPad?",
+    "category": "Floating window",
+    "platforms": [
+      "iOS",
+      "iPadOS"
+    ],
+    "answer": "<p>The small window that keeps your script visible over the Camera app is called <strong>Picture in Picture (PiP)</strong>. If you turn your iPhone or iPad sideways to film in landscape, the text in this window may stay in portrait.</p><ol><li>In <strong>VoicePrompter</strong>, open <strong>Settings</strong>, then <strong>Picture in Picture</strong>.</li><li>Scroll down past the preview to find <strong>Content Rotation</strong>. This is the exact setting name - there is no separate “Force rotate” option.</li><li>Choose <strong>90°</strong> or <strong>-90°</strong> to turn the text sideways. If it faces the wrong way, choose the other value.</li><li>Return to the Camera app with your device held horizontally and check that the floating text is the right way up.</li></ol><p><strong>Content Rotation</strong> turns the text inside the floating window. You change this in VoicePrompter, not in the Camera app or the iPhone’s system settings.</p>",
+    "searchPhrases": ["text is sideways", "floating text won't rotate", "floating window won't rotate", "turn text horizontal", "where is force rotate"],
+    "keywords": "pip picture in picture floating text script window overlay box bubble sideways horizontal landscape portrait vertical native camera content rotation orientation rotate 90 degrees iphone ipad",
+    "videoUrl": null
+  },
+  {
+    "id": "transparent-pip",
+    "question": "Can I make the floating script window transparent?",
+    "category": "Floating window",
+    "platforms": [
+      "android",
+      "iOS",
+      "iPadOS"
+    ],
+    "answer": "<p>No. Making the floating script window (Picture in Picture) transparent is not technically supported on iOS or Android.</p><p>This is different from the script background inside VoicePrompter’s built-in Video mode. The background controls there do not make the external floating window transparent.</p>",
     "keywords": "opacity background see through bubble overlay transparent",
     "videoUrl": null
   },
