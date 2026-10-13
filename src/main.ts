@@ -5,6 +5,7 @@ import { state } from './state';
 import { renderScript, updateHighlight, scrollToCurrent, applySettings, renderHistoryList, restartScript, navigateParagraphs } from './render';
 import { loadPrefs, savePrefs } from './prefs';
 import { enterPrompterScreen, leavePrompterScreen } from './screen';
+import { initSendToPhone } from './send-ui';
 import { initSpeech, startListening, stopListening } from './speech';
 import { autoScrollManager } from './autoscroll';
 import { saveToHistory, getHistory, clearAllHistory } from './storage';
@@ -1133,10 +1134,35 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
 });
 
+// Guião vindo do PC (link com o texto depois do "#")
+let lastSeenTopId = 0;
+function showLatestScript(): void {
+    const latest = getHistory()[0];
+    if (latest) {
+        els.inputScript.value = latest.text;
+        lastSeenTopId = latest.id;
+    }
+    renderHistoryList(getHistory(), loadScript);
+}
+
+// Com a app instalada, o link abre num separador do Chrome e guarda o guião;
+// ao voltar à app, mostra-o se o ecrã inicial estiver aberto.
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !els.prompterContainer.classList.contains('hidden')) return;
+    const latest = getHistory()[0];
+    if (latest && latest.id !== lastSeenTopId) showLatestScript();
+});
+
 function boot(): void {
     updateScrollingUI();
     initializeUI();
     pinDockToVisualViewport();
+    lastSeenTopId = getHistory()[0]?.id ?? 0;
+    initSendToPhone((text) => {
+        if (!els.prompterContainer.classList.contains('hidden')) resetApp();
+        saveToHistory(text.trim());
+        showLatestScript();
+    });
 
     // Fallback for async localStorage injection (e.g. WKWebView)
     setTimeout(() => {

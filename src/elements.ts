@@ -27,6 +27,12 @@ export interface Elements {
     micIcon: HTMLElement;
     statusIndicator: HTMLElement;
     mirrorToggle: HTMLInputElement;
+    sendToPhoneBtn: HTMLElement;
+    sendToPhoneModal: HTMLElement;
+    sendToPhoneQr: HTMLElement;
+    closeSendToPhoneBtn: HTMLElement;
+    copyShareLinkBtn: HTMLElement;
+    toast: HTMLElement;
     fullscreenToggle: HTMLInputElement;
     mirrorModeLabel: HTMLElement;
     hMirrorRow: HTMLElement;
@@ -135,6 +141,12 @@ export function initElements(): void {
         micIcon: document.getElementById('micIcon')!,
         statusIndicator: document.getElementById('statusIndicator')!,
         mirrorToggle: document.getElementById('mirrorToggle') as HTMLInputElement,
+        sendToPhoneBtn: document.getElementById('sendToPhoneBtn')!,
+        sendToPhoneModal: document.getElementById('sendToPhoneModal')!,
+        sendToPhoneQr: document.getElementById('sendToPhoneQr')!,
+        closeSendToPhoneBtn: document.getElementById('closeSendToPhoneBtn')!,
+        copyShareLinkBtn: document.getElementById('copyShareLinkBtn')!,
+        toast: document.getElementById('toast')!,
         fullscreenToggle: document.getElementById('fullscreenToggle') as HTMLInputElement,
         mirrorModeLabel: document.getElementById('mirrorModeLabel')!,
         hMirrorRow: document.getElementById('hMirrorRow')!,
