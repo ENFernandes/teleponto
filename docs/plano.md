@@ -83,3 +83,16 @@ Depois: Chrome → «Adicionar ao ecrã principal».
 - Decisão: manter o histórico e o remote `upstream` — permite trazer correções do autor — custo baixo; se atrapalhar, corta-se.
 - Decisão: Android primeiro, sem testes em iPhone — o Elder só usa Android — se um dia houver iPhone, a base do VoicePrompter já o suporta.
 - Decisão: fase 3A antes da 3B — garante gravar reels já, com pouco risco; o Vosk pode não ser preciso o suficiente — se a 3B falhar, perdem-se ≈ 2 h.
+
+## Estado (13 out 2026)
+
+| Fase | Estado | Commit |
+|---|---|---|
+| 0 — Base | Feita. Saíram também um gravador de sessões (gravava 30 % das visitas) e um erro de arranque do original. | `b8ed980` |
+| 1 — Seguimento pt-PT | Feita. 18 testes com os 3 guiões (`npm test`). | `4611987` |
+| 2 — Conforto e gravação | Feita, mais definições guardadas e abrir com o último guião. | `73bc826` |
+| 3A — Modo som a gravar no Android | Feita (mesmo commit). Testada no browser com câmara e microfone simulados. | `73bc826` |
+| 3B — Vosk | Por fazer (spike). | — |
+| 4 — No telemóvel | À espera do «sim» do Elder para o GitHub Pages. | — |
+
+Por confirmar no telemóvel do Elder: o conflito do microfone no Android, o formato vertical do vídeo gravado e a precisão do reconhecimento com a voz dele.
