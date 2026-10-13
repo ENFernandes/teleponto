@@ -90,6 +90,9 @@ export function scrollToCurrent(): void {
             const containerHeight = els.scrollContainer.clientHeight;
             // Position based on user setting (percentage from top)
             const positionRatio = state.config.activeLinePosition / 100;
+            // O espaço no topo acompanha a linha de leitura; sem isto, as primeiras
+            // linhas ficavam a meio do ecrã em vez de junto à câmara.
+            els.topSpacer.style.height = `${Math.round(containerHeight * positionRatio)}px`;
             const targetPosition = currentWordObj.element.offsetTop - (containerHeight * positionRatio);
 
             if (state.config.smoothAnimations) {
