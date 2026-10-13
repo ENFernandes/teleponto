@@ -27,6 +27,14 @@ export interface Elements {
     micIcon: HTMLElement;
     statusIndicator: HTMLElement;
     mirrorToggle: HTMLInputElement;
+    reviewModal: HTMLElement;
+    reviewVideo: HTMLVideoElement;
+    reviewInfo: HTMLElement;
+    reviewWarning: HTMLElement;
+    reviewDiscardBtn: HTMLElement;
+    reviewShareBtn: HTMLElement;
+    reviewSaveBtn: HTMLElement;
+    recLevelBar: HTMLElement;
     sendToPhoneBtn: HTMLElement;
     sendToPhoneModal: HTMLElement;
     sendToPhoneQr: HTMLElement;
@@ -141,6 +149,14 @@ export function initElements(): void {
         micIcon: document.getElementById('micIcon')!,
         statusIndicator: document.getElementById('statusIndicator')!,
         mirrorToggle: document.getElementById('mirrorToggle') as HTMLInputElement,
+        reviewModal: document.getElementById('reviewModal')!,
+        reviewVideo: document.getElementById('reviewVideo') as HTMLVideoElement,
+        reviewInfo: document.getElementById('reviewInfo')!,
+        reviewWarning: document.getElementById('reviewWarning')!,
+        reviewDiscardBtn: document.getElementById('reviewDiscardBtn')!,
+        reviewShareBtn: document.getElementById('reviewShareBtn')!,
+        reviewSaveBtn: document.getElementById('reviewSaveBtn')!,
+        recLevelBar: document.getElementById('recLevelBar')!,
         sendToPhoneBtn: document.getElementById('sendToPhoneBtn')!,
         sendToPhoneModal: document.getElementById('sendToPhoneModal')!,
         sendToPhoneQr: document.getElementById('sendToPhoneQr')!,

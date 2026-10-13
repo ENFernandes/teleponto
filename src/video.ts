@@ -23,9 +23,15 @@ export function getMediaConstraints(): MediaStreamConstraints {
         videoConstraints.facingMode = state.facingMode;
     }
 
-    const audioConstraints: any = state.selectedAudioDeviceId
-        ? { deviceId: state.selectedAudioDeviceId }
-        : true;
+    // Sem o tratamento de chamadas (eco, ruído, ganho automático): no Android esse
+    // tratamento abre o microfone em modo "chamada de voz", que nalguns telemóveis
+    // ignora microfones externos ou dá silêncio. Para gravar vídeo, o som cru é melhor.
+    const audioConstraints: any = {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false
+    };
+    if (state.selectedAudioDeviceId) audioConstraints.deviceId = state.selectedAudioDeviceId;
 
     return {
         video: videoConstraints,
@@ -190,37 +196,99 @@ export async function startRecordingWithCountdown(seconds = 3): Promise<boolean>
     return state.isRecording;
 }
 
+// ── Diagnóstico da gravação: nível do som, microfone usado, porque parou ──
+
+interface RecordingInfo {
+    startedAt: number;
+    stoppedAt: number;
+    mime: string;
+    micLabel: string;
+    peak: number; // 0–1, maior nível de som ouvido
+    stoppedBy: 'user' | 'system';
+    endedTracks: string[];
+    error: string | null;
+}
+
+let info: RecordingInfo | null = null;
+let trackWatch: AbortController | null = null;
+let meter: { ctx: AudioContext; raf: number } | null = null;
+
+function startLevelMeter(stream: MediaStream): void {
+    const track = stream.getAudioTracks()[0];
+    if (!track) return;
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const ctx: AudioContext = new AudioContextClass();
+    ctx.resume().catch(() => {});
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 512;
+    ctx.createMediaStreamSource(new MediaStream([track])).connect(analyser);
+    const data = new Uint8Array(analyser.fftSize);
+    const loop = () => {
+        analyser.getByteTimeDomainData(data);
+        let peak = 0;
+        for (let i = 0; i < data.length; i++) peak = Math.max(peak, Math.abs(data[i] - 128) / 128);
+        if (info) info.peak = Math.max(info.peak, peak);
+        els.recLevelBar.style.width = `${Math.min(100, Math.round(peak * 140))}%`;
+        meter!.raf = requestAnimationFrame(loop);
+    };
+    meter = { ctx, raf: requestAnimationFrame(loop) };
+}
+
+function stopLevelMeter(): void {
+    if (!meter) return;
+    cancelAnimationFrame(meter.raf);
+    meter.ctx.close().catch(() => {});
+    meter = null;
+    els.recLevelBar.style.width = '0%';
+}
+
+// AAC primeiro: o som Opus dentro de MP4 não toca na Galeria de muitos Android nem em todo o lado.
+const MIME_TYPES = [
+    'video/mp4;codecs=avc1,mp4a.40.2',
+    'video/mp4;codecs=avc1,opus',
+    'video/mp4',
+    'video/webm;codecs=vp9,opus',
+    'video/webm;codecs=vp8,opus',
+    'video/webm'
+];
+
 export function startRecording(): void {
     if (!state.mediaStream) return;
 
     state.recordedChunks = [];
-
-    // Prefer MP4 with H.264 (supported in Chrome 120+, Safari)
-    // Fall back to WebM if MP4 is not available
-    const mimeTypes = [
-        'video/mp4;codecs=avc1,opus',
-        'video/mp4;codecs=avc1',
-        'video/mp4',
-        'video/webm;codecs=vp9,opus',
-        'video/webm;codecs=vp8,opus',
-        'video/webm'
-    ];
-
-    let selectedMimeType = '';
-    for (const mt of mimeTypes) {
-        if (MediaRecorder.isTypeSupported(mt)) {
-            selectedMimeType = mt;
-            break;
-        }
-    }
+    const stream = state.mediaStream;
+    const selectedMimeType = MIME_TYPES.find(mt => MediaRecorder.isTypeSupported(mt)) || '';
 
     try {
-        state.mediaRecorder = selectedMimeType
-            ? new MediaRecorder(state.mediaStream, { mimeType: selectedMimeType, videoBitsPerSecond: 8_000_000 })
-            : new MediaRecorder(state.mediaStream);
+        state.mediaRecorder = new MediaRecorder(stream, {
+            ...(selectedMimeType ? { mimeType: selectedMimeType } : {}),
+            videoBitsPerSecond: 8_000_000,
+            audioBitsPerSecond: 192_000
+        });
     } catch (e) {
-        state.mediaRecorder = new MediaRecorder(state.mediaStream);
+        state.mediaRecorder = new MediaRecorder(stream);
     }
+
+    const audioTrack = stream.getAudioTracks()[0];
+    info = {
+        startedAt: performance.now(),
+        stoppedAt: 0,
+        mime: state.mediaRecorder.mimeType || selectedMimeType,
+        micLabel: audioTrack ? (audioTrack.label || 'microfone sem nome') : 'nenhum',
+        peak: 0,
+        stoppedBy: 'system',
+        endedTracks: [],
+        error: null
+    };
+    // Se o sistema desligar a câmara ou o microfone a meio, fica registado (só nesta gravação)
+    trackWatch?.abort();
+    trackWatch = new AbortController();
+    stream.getTracks().forEach(t => {
+        t.addEventListener('ended', () => {
+            const what = t.kind === 'audio' ? 'o microfone' : 'a câmara';
+            if (info && !info.endedTracks.includes(what)) info.endedTracks.push(what);
+        }, { signal: trackWatch!.signal });
+    });
 
     state.mediaRecorder.ondataavailable = (event: BlobEvent) => {
         if (event.data && event.data.size > 0) {
@@ -228,12 +296,22 @@ export function startRecording(): void {
         }
     };
 
+    state.mediaRecorder.onerror = (event: any) => {
+        if (info) info.error = event?.error?.name || 'erro desconhecido';
+    };
+
     state.mediaRecorder.onstop = () => {
-        downloadRecording();
+        if (info) info.stoppedAt = performance.now();
+        trackWatch?.abort();
+        trackWatch = null;
+        stopLevelMeter();
+        if (state.isRecording) resetRecordingUI(); // parou sem ser pelo botão
+        showReview();
     };
 
     state.mediaRecorder.start(1000); // Collect data every second
     state.isRecording = true;
+    startLevelMeter(stream);
 
     // Update UI
     els.videoRecordBtn.classList.add('hidden');
@@ -241,47 +319,121 @@ export function startRecording(): void {
     els.videoRecordingIndicator.classList.remove('hidden');
     const dock = document.getElementById('mainControlsDock');
     if (dock) dock.style.opacity = (state.config.dockOpacity / 100).toString();
-
 }
 
-export function stopRecording(): void {
-    if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
-        state.mediaRecorder.stop();
-    }
+function resetRecordingUI(): void {
     state.isRecording = false;
-
-    // Update UI
     els.videoRecordBtn.classList.remove('hidden');
     els.videoStopBtn.classList.add('hidden');
     els.videoRecordingIndicator.classList.add('hidden');
     const dock = document.getElementById('mainControlsDock');
     if (dock) { dock.style.opacity = ''; }
-
 }
 
-function downloadRecording(): void {
+export function stopRecording(): void {
+    if (info) info.stoppedBy = 'user';
+    if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
+        state.mediaRecorder.stop();
+    }
+    resetRecordingUI();
+}
+
+// ── Rever, guardar, partilhar ──
+
+let reviewBlob: Blob | null = null;
+let reviewUrl = '';
+let reviewName = '';
+
+function formatDuration(ms: number): string {
+    const s = Math.max(0, Math.round(ms / 1000));
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+function describeFormat(mime: string): string {
+    const container = mime.includes('mp4') ? 'MP4' : 'WebM';
+    const audio = mime.includes('mp4a') ? 'AAC' : mime.includes('opus') ? 'Opus' : 'som por omissão';
+    return `${container}, ${audio}`;
+}
+
+function showReview(): void {
     if (state.recordedChunks.length === 0) return;
 
-    // Determine file extension from the actual mimeType used
-    const actualMime = state.mediaRecorder?.mimeType || '';
+    const actualMime = state.mediaRecorder?.mimeType || info?.mime || '';
     const isMP4 = actualMime.includes('mp4');
-    const extension = isMP4 ? 'mp4' : 'webm';
-    const blobType = isMP4 ? 'video/mp4' : 'video/webm';
-
-    const blob = new Blob(state.recordedChunks, { type: blobType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    reviewBlob = new Blob(state.recordedChunks, { type: isMP4 ? 'video/mp4' : 'video/webm' });
+    state.recordedChunks = [];
 
     const now = new Date();
-    const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
-    a.download = `teleponto-${timestamp}.${extension}`;
+    const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+    reviewName = `teleponto-${timestamp}.${isMP4 ? 'mp4' : 'webm'}`;
 
+    if (reviewUrl) URL.revokeObjectURL(reviewUrl);
+    reviewUrl = URL.createObjectURL(reviewBlob);
+    els.reviewVideo.src = reviewUrl;
+
+    const duration = info ? info.stoppedAt - info.startedAt : 0;
+    const sizeMb = (reviewBlob.size / 1_000_000).toFixed(1).replace('.', ',');
+    const peakPct = Math.round((info?.peak ?? 0) * 100);
+    els.reviewInfo.textContent =
+        `${formatDuration(duration)} · ${sizeMb} MB · ${describeFormat(actualMime)} · ` +
+        `Microfone: ${info?.micLabel ?? '?'} · Nível máximo do som: ${peakPct} %`;
+
+    const warnings: string[] = [];
+    if (info && info.stoppedBy === 'system') {
+        const what = info.endedTracks.length ? `o sistema desligou ${info.endedTracks.join(' e ')}` : 'a gravação foi interrompida pelo sistema';
+        warnings.push(`A gravação parou sozinha aos ${formatDuration(duration)}: ${what}.`);
+    }
+    if (info?.error) warnings.push(`Erro do gravador: ${info.error}.`);
+    if (info && info.micLabel === 'nenhum') warnings.push('Não havia microfone na gravação.');
+    else if (peakPct < 2) warnings.push('Não se ouviu som durante a gravação. Confirme o microfone em Definições → Microfone e grave outra vez.');
+    els.reviewWarning.textContent = warnings.join(' ');
+    els.reviewWarning.classList.toggle('hidden', warnings.length === 0);
+
+    const file = new File([reviewBlob], reviewName, { type: reviewBlob.type });
+    const canShare = typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] });
+    els.reviewShareBtn.classList.toggle('hidden', !canShare);
+
+    els.reviewModal.classList.remove('hidden');
+}
+
+function closeReview(): void {
+    els.reviewModal.classList.add('hidden');
+    els.reviewVideo.pause();
+    els.reviewVideo.removeAttribute('src');
+    els.reviewVideo.load();
+    if (reviewUrl) URL.revokeObjectURL(reviewUrl);
+    reviewUrl = '';
+    reviewBlob = null;
+}
+
+function saveReview(): void {
+    if (!reviewBlob) return;
+    const url = URL.createObjectURL(reviewBlob);
+    const a = document.createElement('a');
     a.href = url;
+    a.download = reviewName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-
-    // Cleanup
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    state.recordedChunks = [];
+    closeReview();
+}
+
+async function shareReview(): Promise<void> {
+    if (!reviewBlob) return;
+    const file = new File([reviewBlob], reviewName, { type: reviewBlob.type });
+    try {
+        await navigator.share({ files: [file], title: 'Teleponto' });
+        closeReview();
+    } catch {
+        // cancelou a partilha: fica no ecrã de revisão
+    }
+}
+
+export function initRecordingReview(): void {
+    els.reviewSaveBtn.addEventListener('click', saveReview);
+    els.reviewShareBtn.addEventListener('click', shareReview);
+    els.reviewDiscardBtn.addEventListener('click', () => {
+        if (confirm('Descartar esta gravação?')) closeReview();
+    });
 }

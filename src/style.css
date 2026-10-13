@@ -287,3 +287,27 @@ input[type=range]::-moz-range-track {
     text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
     pointer-events: none;
 }
+
+/* Botões da câmara: em cima da imagem; no modo sobreposto, acima da barra de baixo */
+.video-mode-overlay #videoControls {
+    top: auto;
+    bottom: 7.5rem;
+}
+
+/* Nível do som enquanto grava */
+.rec-level {
+    display: inline-block;
+    width: 48px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.rec-level > span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: #4ade80;
+    transition: width 80ms linear;
+}

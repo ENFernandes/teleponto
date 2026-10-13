@@ -10,7 +10,7 @@ import { initSpeech, startListening, stopListening } from './speech';
 import { autoScrollManager } from './autoscroll';
 import { saveToHistory, getHistory, clearAllHistory } from './storage';
 import { ScriptWord, ScrollingMode } from './types';
-import { enterVideoMode, exitVideoMode, toggleVideoLayout, startRecordingWithCountdown, stopRecording, flipCamera, getMediaConstraints } from './video';
+import { enterVideoMode, exitVideoMode, toggleVideoLayout, startRecordingWithCountdown, stopRecording, flipCamera, getMediaConstraints, initRecordingReview } from './video';
 import { detectAll } from 'tinyld/light';
 import { enumerateAndPopulateDevices } from './devices';
 
@@ -1101,6 +1101,14 @@ els.soundSensitivityInput.addEventListener('input', (e) => {
     els.soundSensitivityVal.textContent = `${Math.round(state.config.soundSensitivity * 100)}%`;
 });
 
+let resizeFrame = 0;
+new ResizeObserver(() => {
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => {
+        if (!els.prompterContainer.classList.contains('hidden')) scrollToCurrent();
+    });
+}).observe(els.scrollContainer);
+
 // Guardar as definições sempre que se mexe no painel (depois de o controlo atualizar o estado)
 ['input', 'change', 'click'].forEach(type => {
     els.settingsPanel.addEventListener(type, () => setTimeout(savePrefs, 0));
@@ -1158,6 +1166,7 @@ function boot(): void {
     initializeUI();
     pinDockToVisualViewport();
     lastSeenTopId = getHistory()[0]?.id ?? 0;
+    initRecordingReview();
     initSendToPhone((text) => {
         if (!els.prompterContainer.classList.contains('hidden')) resetApp();
         saveToHistory(text.trim());

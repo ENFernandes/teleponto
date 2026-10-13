@@ -71,6 +71,23 @@
         </div>
     </div>
 
+    <!-- Rever a gravação -->
+    <div id="reviewModal"
+        class="hidden fixed inset-0 z-[10002] bg-black/95 flex flex-col items-center justify-center p-4 gap-3">
+        <h2 class="text-base font-bold text-white">Rever a gravação</h2>
+        <video id="reviewVideo" class="max-h-[58vh] max-w-full rounded-lg bg-black" controls playsinline></video>
+        <p id="reviewWarning" role="alert" class="hidden text-sm text-[#FFBB00] text-center max-w-sm leading-snug"></p>
+        <p id="reviewInfo" class="text-xs text-neutral-400 text-center max-w-sm leading-relaxed"></p>
+        <div class="flex gap-2 w-full max-w-sm">
+            <button id="reviewDiscardBtn"
+                class="flex-1 px-3 py-3 bg-neutral-800 hover:bg-neutral-700 rounded-lg text-sm text-neutral-300 border border-neutral-700">Descartar</button>
+            <button id="reviewShareBtn"
+                class="hidden flex-1 px-3 py-3 bg-neutral-800 hover:bg-neutral-700 rounded-lg text-sm text-white border border-neutral-700">Partilhar</button>
+            <button id="reviewSaveBtn"
+                class="flex-1 px-3 py-3 bg-[#FFBB00] hover:bg-[#D9A000] rounded-lg text-sm font-bold text-neutral-900">Guardar</button>
+        </div>
+    </div>
+
     <!-- Enviar para o telemóvel -->
     <div id="sendToPhoneModal"
         class="hidden fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -225,9 +242,15 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- Video Container (hidden by default) -->
+        <div id="videoContainer" class="hidden">
+            <video id="videoPreview" class="video-preview" playsinline muted></video>
+
             <!-- Video Controls (hidden by default) -->
             <div id="videoControls"
-                class="hidden absolute bottom-6 right-6 flex justify-end items-center gap-3 z-[9000] isolate pointer-events-none">
+                class="hidden absolute top-3 right-3 flex justify-end items-center gap-3 z-[9000] isolate pointer-events-none">
                 <!-- Flip Camera -->
                 <button id="videoFlipCameraBtn"
                     class="pointer-events-auto p-2.5 rounded-full bg-neutral-800/90 backdrop-blur text-neutral-300 hover:text-white hover:bg-neutral-700 transition-all"
@@ -268,13 +291,9 @@
                 <div id="videoRecordingIndicator" class="hidden pointer-events-none flex items-center gap-2">
                     <span class="w-2.5 h-2.5 bg-red-500 rounded-full recording-pulse"></span>
                     <span class="text-red-400 text-xs font-medium">REC</span>
+                    <span class="rec-level" title="Nível do som"><span id="recLevelBar"></span></span>
                 </div>
             </div>
-        </div>
-
-        <!-- Video Container (hidden by default) -->
-        <div id="videoContainer" class="hidden">
-            <video id="videoPreview" class="video-preview" playsinline muted></video>
         </div>
 
         <!-- Controls Overlay -->
