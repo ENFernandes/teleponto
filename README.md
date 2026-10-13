@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Abre em `http://localhost:5173 (ou na porta 5180, com o preview do Claude)`. `npm test` corre os testes; `npm run build` gera a versão estática em `dist/`.
+Abre em `http://localhost:5173`. `npm test` corre os testes; `npm run build` gera a versão estática em `dist/`.
 
 ## Diferenças em relação ao original
 

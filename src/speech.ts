@@ -1,12 +1,27 @@
 import { state } from './state';
 import { els } from './elements';
 import { updateMicUI, updateHighlight, scrollToCurrent, advancePastSkipped, restartScript, navigateParagraphs } from './render';
+import { buildKeys, detectCommand, Follower, tokenize } from './matcher';
+import { ScriptWord } from './types';
 
-// Track the last matched word to prevent matching the same word twice in a row
-let lastMatchedWord = '';
+// O seguidor é refeito quando o guião muda; a posição sincroniza-se com
+// state.currentIndex, que também muda por toque, recomeço ou salto de parágrafo.
+let follower: Follower | null = null;
+let followerWords: ScriptWord[] | null = null;
+let lastReportedIndex = -1;
 
-// Track which result indices we already processed for commands
-// to prevent re-firing when the recognition engine revisits finalized results
+function getFollower(): Follower {
+    if (!follower || followerWords !== state.scriptWords) {
+        follower = new Follower(buildKeys(state.scriptWords), state.scriptWords.length);
+        followerWords = state.scriptWords;
+        lastReportedIndex = -1;
+    }
+    if (state.currentIndex !== lastReportedIndex) {
+        follower.syncToWord(state.currentIndex);
+        lastReportedIndex = state.currentIndex;
+    }
+    return follower;
+}
 
 let speechBlocked = false;
 
@@ -43,68 +58,42 @@ export function initSpeech(): void {
 
         let transcript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript;
+            transcript += ' ' + event.results[i][0].transcript;
         }
 
-        // --- Voice Commands (Mac-Style) ---
+        const spoken = tokenize(transcript);
+        const f = getFollower();
+
+        // --- Comandos de voz ---
         if (state.config.voiceCommandsEnabled) {
-            const cleanTokens = transcript.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(t => t.length > 0);
-            if (cleanTokens.length >= 2) {
-                const lastTwoWords = cleanTokens.slice(-2).join(' ');
-                let commandMatched: string | null = null;
-                
-                if (lastTwoWords === 'go start') commandMatched = 'go start';
-                else if (lastTwoWords === 'go finish') commandMatched = 'go finish';
-                else if (lastTwoWords === 'go next') commandMatched = 'go next';
-                else if (lastTwoWords === 'go back') commandMatched = 'go back';
-                
-                if (commandMatched) {
-                    const commandTokens = commandMatched.split(' ');
-                    // Conflict resolution: look around the current index (back 4, forward 10)
-                    const startIdx = Math.max(0, state.currentIndex - 4);
-                    const endIdx = Math.min(state.scriptWords.length, state.currentIndex + 10);
-                    const windowScript = state.scriptWords.slice(startIdx, endIdx).map(w => w.word.toLowerCase().replace(/[^\w\s]/g, ''));
-                    
-                    let conflict = false;
-                    for (let j = 0; j < Math.max(0, windowScript.length - 1); j++) {
-                        if (windowScript[j] === commandTokens[0] && windowScript[j+1] === commandTokens[1]) {
-                            conflict = true;
-                            break;
-                        }
-                    }
-                    
-                    if (!conflict) {
-                        if (commandArmed) {
-                            commandArmed = false;
-                            console.log(`[VoiceCommand] TRIGGER: ${commandMatched}`);
-                            if (commandMatched === 'go start') {
-                                restartScript();
-                            } else if (commandMatched === 'go finish') {
-                                state.currentIndex = Math.max(0, state.scriptWords.length - 1);
-                                updateHighlight();
-                                scrollToCurrent();
-                            } else if (commandMatched === 'go next') {
-                                navigateParagraphs('forward', 1);
-                            } else if (commandMatched === 'go back') {
-                                navigateParagraphs('back', 1);
-                            }
-                            lastMatchedWord = '';
-                            return; // Stop processing to prevent the command from being read as script text
-                        }
-                    } else {
-                        commandArmed = true;
-                    }
+            const command = detectCommand(spoken, f.keys, f.pos);
+            if (command && commandArmed) {
+                commandArmed = false;
+                if (command === 'start') {
+                    restartScript();
+                } else if (command === 'finish') {
+                    state.currentIndex = Math.max(0, state.scriptWords.length - 1);
+                    updateHighlight();
+                    scrollToCurrent();
+                } else if (command === 'next') {
+                    navigateParagraphs('forward', 1);
                 } else {
-                    commandArmed = true;
+                    navigateParagraphs('back', 1);
                 }
-            } else {
-                commandArmed = true;
+                return; // não ler o comando como texto do guião
             }
+            if (!command) commandArmed = true;
+            else return; // o mesmo comando a chegar outra vez nos resultados provisórios
         }
 
-        // --- Word matching: uses all results (interim + final) for responsiveness ---
-        const spokenWords = transcript.trim().toLowerCase().split(/\s+/);
-        matchWords(spokenWords.slice(-5));
+        // --- Seguimento: usa os resultados provisórios e finais, para reagir depressa ---
+        if (f.update(spoken, state.config.lookaheadWords)) {
+            state.currentIndex = f.currentWord();
+            advancePastSkipped();
+            lastReportedIndex = state.currentIndex;
+            updateHighlight();
+            scrollToCurrent();
+        }
     };
 
     state.recognition.onerror = (e: any) => {
@@ -171,7 +160,6 @@ export function initSpeech(): void {
 export function startListening(): void {
     if (!state.recognition) return;
     state.isListening = true;
-    lastMatchedWord = '';
 
     speechBlocked = false;
     try {
@@ -187,7 +175,6 @@ export function startListening(): void {
 export function stopListening(): void {
     if (!state.recognition) return;
     state.isListening = false;
-    lastMatchedWord = '';
 
     try {
         state.recognition.stop();
@@ -196,56 +183,3 @@ export function stopListening(): void {
         console.error('Failed to stop speech recognition:', error);
     }
 }
-
-function matchWords(spokenWords: string[]) {
-    if (state.currentIndex >= state.scriptWords.length) return;
-    if (spokenWords.length === 0) return;
-
-    const LOOKAHEAD = state.config.lookaheadWords;
-
-    // Create a Set of cleaned spoken words for fast lookup
-    const spokenSet = new Set(
-        spokenWords
-            .map(w => w.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase())
-            .filter(w => w.length > 0)
-    );
-
-    if (spokenSet.size === 0) return;
-
-    // Iterate through SCRIPT words from nearest to farthest
-    // This ensures we always advance to the nearest matching word
-    let scriptPtr = state.currentIndex;
-    let validWordsChecked = 0;
-
-    while (scriptPtr < state.scriptWords.length && validWordsChecked < LOOKAHEAD) {
-        const scriptWordObj = state.scriptWords[scriptPtr];
-
-        if (scriptWordObj.skip) {
-            scriptPtr++;
-            continue;
-        }
-
-        // Check if this script word was spoken
-        if (spokenSet.has(scriptWordObj.clean)) {
-            // Prevent matching the same word twice in a row (prevents double-jump)
-            // But allow it if it's at the current position (position 0 in lookahead)
-            if (scriptWordObj.clean === lastMatchedWord && validWordsChecked > 0) {
-                // Same word as last match, and not at current position - skip it
-                scriptPtr++;
-                validWordsChecked++;
-                continue;
-            }
-
-            lastMatchedWord = scriptWordObj.clean;
-            state.currentIndex = scriptPtr + 1;
-            advancePastSkipped();
-            updateHighlight();
-            scrollToCurrent();
-            return;
-        }
-
-        scriptPtr++;
-        validWordsChecked++;
-    }
-}
-
