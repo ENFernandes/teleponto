@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Teleprompter App That Follows Your Voice | VoicePrompter</title>
+    <meta name="description" content="A free teleprompter app that scrolls as you speak. Use it in your browser or download native apps for Android, Mac, iPhone and iPad.">
+    <link rel="canonical" href="https://voiceprompter.app/">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/logo-icon-no-bg.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://voiceprompter.app/">
+    <meta property="og:title" content="Free Teleprompter App That Follows Your Voice | VoicePrompter">
+    <meta property="og:description" content="A free teleprompter app that scrolls as you speak. Use it in your browser or download native apps for Android, Mac, iPhone and iPad.">
+    <meta property="og:image" content="https://voiceprompter.app/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://voiceprompter.app/">
+    <meta property="twitter:title" content="Free Teleprompter App That Follows Your Voice | VoicePrompter">
+    <meta property="twitter:description" content="A free teleprompter app that scrolls as you speak. Use it in your browser or download native apps for Android, Mac, iPhone and iPad.">
+    <meta property="twitter:image" content="https://voiceprompter.app/og-image.png">
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "VoicePrompter",
+      "operatingSystem": "Web, iOS, Android, Windows, macOS",
+      "applicationCategory": "MultimediaApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Free voice-activated teleprompter app that scrolls automatically as you speak. Works offline, secure, and requires no download.",
+      "dateModified": "2026-07-24",
+      "featureList": "Voice recognition scrolling, Mirror mode, Offline capable, Cross-platform, Customizable font and speed"
+    }
+    </script>
+
+    <!-- FAQ schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is VoicePrompter free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The web app is completely free and open source. The native Android, Mac, iPhone, and iPad apps are free to try with up to 3 custom scripts plus an unlimited demo script; paid plans, including a one-time Lifetime option, unlock more." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does voice-activated scrolling work?",
+          "acceptedAnswer": { "@type": "Answer", "text": "VoicePrompter matches your spoken words against your entire script in real time and scrolls only as you speak, pausing when you pause and resuming when you continue. The web app uses the Web Speech API, Apple apps use Apple's Speech framework, and Android uses the device's speech-recognition service." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the free web app and the native apps?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Both scroll with your voice. The web app is free, open source, and runs in a browser with no download. The native Android, Mac, iPhone, and iPad apps add saved scripts, richer controls, 4K recording on mobile, floating picture-in-picture on phones and tablets, and an invisible screen-sharing window on Mac." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is VoicePrompter different from other teleprompter apps?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Most teleprompters scroll at a fixed speed, or track only the next few words and stall the moment you improvise. VoicePrompter follows your voice against the whole script, so you can ad-lib, skip ahead, or backtrack and it keeps up - it even scrolls backward. It also stays invisible during screen shares on Mac, keeps everything on your device, and offers a one-time Lifetime purchase instead of forcing a subscription." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the teleprompter stay invisible during screen sharing?",
+          "acceptedAnswer": { "@type": "Answer", "text": "On Mac, yes. The app window is excluded from screen capture at the macOS level, so it stays invisible in Zoom, Google Meet, Teams, OBS, and QuickTime recordings while remaining visible only to you." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if I go off-script or skip a section?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Nothing breaks. VoicePrompter matches your voice against the whole script, not just the next line, so it waits while you ad-lib and picks up as soon as you return to the text. Skip a section and it follows you there. You can also tap any word to continue from that exact spot." }
+        },
+        {
+          "@type": "Question",
+          "name": "What platforms does VoicePrompter support?",
+          "acceptedAnswer": { "@type": "Answer", "text": "VoicePrompter has native apps for Android, macOS, iPhone, and iPad, plus a free web app that runs in Chrome, Edge, and Safari. Apple Universal Purchase covers the Mac, iPhone, and iPad apps; Google Play purchases are managed separately." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work on Android or Windows?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Android users can download the native VoicePrompter app from Google Play, with whole-script voice scrolling, picture-in-picture over other apps, and in-app video recording. Windows users can use the free web app in Chrome or Edge." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my script private?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Your scripts stay on your device and no account is required. Apple apps and the web app can process speech locally; Android prefers on-device recognition but may use the installed system speech service for some device and language combinations." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to create an account?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No account, sign-up, or email is required. The native apps use the relevant store account for purchases, while your scripts remain on your device." }
+        },
+        {
+          "@type": "Question",
+          "name": "How many languages does it support?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The Apple apps track 60+ languages, the Android app includes more than 40 recognition locales with availability depending on the device's speech service, and the free web app supports 34." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I add stage directions or notes I don't want to read out loud?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes - put anything in square brackets and VoicePrompter will display it but skip it during voice scrolling. Useful for cues like [pause], [smile], or [check slide]." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I jump to a specific part of my script?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes - tap any word on screen and VoicePrompter starts listening from exactly that point. Useful if you skip a section, restart a segment, or want to jump ahead." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work without an internet connection?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The native Apple apps run speech recognition on-device, and the web app can be installed as an offline PWA. Android can use on-device recognition when a compatible language pack is installed; some devices and languages use the system speech service and may need a connection." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I read a script naturally during a video call?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Position the script window as close to your camera as possible, use voice-activated scrolling so you never touch the keyboard, and adjust font size and transparency so you can read comfortably while keeping eye contact." }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Google+Sans+Flex:opsz,wght@8..144,100..1000&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/google-sans:vf@latest/latin.css">
+
+    <!-- Umami Analytics -->
+    <script defer src="https://reactive-analytics.up.railway.app/script.js"
+        data-website-id="eee38a2c-9b72-4937-9ee4-37827bae546c"></script>
+    <!-- Ansvisor AI-traffic tracking -->
+    <script src="https://ansvisor-api.konsu.dev/t.js" data-t="52654f870814a45e679ea63d95079b41" defer></script>
+
+    <style>
+        /* ───────────────────────── Reset & Tokens ───────────────────────── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0F0F0F;
+            --surface: #1A1A1A;
+            --surface-border: rgba(255, 255, 255, 0.06);
+            --text: #E8E4DF;
+            --text-light: #9A948D;
+            --accent: #F5F0EB;
+            --pop: #FFBB00;
+            --pop-hover: #D9A000;
+            --shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+            --radius: 18px;
+            --pill: 100px;
+            --font-serif: 'Google Sans', 'Google Sans Flex', 'Product Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-sans: 'DM Sans', 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            font-size: 17px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 180px 180px;
+        }
+
+        img,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ───────────────────────── Layout ───────────────────────── */
+        .container {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 0 32px;
+            width: 100%;
+        }
+
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 0 40px;
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ───────────────────────── Nav ───────────────────────── */
+        .nav {
+            padding: 28px 32px;
+            max-width: 1060px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-logo img {
+            position: relative;
+            top: -1px;
+        }
+
+        .nav-logo {
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Google Sans Flex', 'Roboto Flex', 'DM Sans', system-ui, sans-serif;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+
+
+        /* ───────────────────────── Hero ───────────────────────── */
+        .hero {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .eyebrow {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--pop);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: 56px;
+            line-height: 1.12;
+            color: var(--accent);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .startup-fame-badge {
+            display: inline-block;
+            margin-bottom: 24px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .startup-fame-badge:hover {
+            opacity: 1;
+        }
+
+        .startup-fame-badge img {
+            height: 32px;
+            width: auto;
+        }
+
+        .hero-sub {
+            font-size: 19px;
+            color: var(--text-light);
+            max-width: 480px;
+            margin: 0 auto 32px;
+            line-height: 1.6;
+        }
+
+        .hero-ctas {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        /* ───────────────────────── Fork ───────────────────────── */
+        .fork-label {
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 14px;
+            color: var(--text-light);
+            letter-spacing: 0.08em;
+        }
+
+        .fork-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .fork-card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius);
+            padding: 40px 32px 36px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+
+        .fork-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pop);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            padding: 4px 12px;
+            background: rgba(255, 187, 0, 0.1);
+            border-radius: var(--pill);
+            align-self: flex-start;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 30px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-subtitle {
+            display: block;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-light);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .card-body {
+            font-size: 16px;
+            color: var(--text-light);
+            line-height: 1.65;
+            margin-bottom: 24px;
+        }
+
+        .card-perks {
+            list-style: none;
+            margin-bottom: 32px;
+            flex: 1;
+        }
+
+        .card-perks li {
+            font-size: 14px;
+            color: var(--text-light);
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-perks li::before {
+            content: ' - ';
+            color: var(--pop);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .card-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: var(--pop);
+            color: #1A1410;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 500;
+            padding: 13px 28px;
+            border-radius: var(--pill);
+            transition: background 0.25s, transform 0.2s;
+            align-self: flex-start;
+        }
+
+        .card-cta:hover {
+            background: var(--pop-hover);
+            transform: translateY(-1px);
+        }
+
+        .card-flavor {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Mac card - slightly different accent */
+        .fork-card.mac .card-tag {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .fork-card.mac .card-cta {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .fork-card.mac .card-cta:hover {
+            background: #ddd8d2;
+        }
+
+        /* ───────────────────────── Escape Hatch ───────────────────────── */
+        .escape {
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .escape p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .escape-btns {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .escape-btn-web {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            color: var(--accent);
+            border: 1px solid var(--surface-border);
+            font-family: var(--font-sans);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 0 12px;
+            height: 44px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: border-color 0.2s, transform 0.2s, background 0.2s;
+        }
+
+        .escape-btn-web:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: #252525;
+            transform: translateY(-1px);
+        }
+
+        .escape-btn-mac img {
+            height: 44px;
+            display: block;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .escape-btn-mac:hover img {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        /* ───────────────────────── Footer ───────────────────────── */
+        .footer {
+            padding: 44px 32px 28px;
+            border-top: 1px solid var(--surface-border);
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: 40px;
+            row-gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 14px;
+            color: var(--text);
+            text-decoration: none;
+            padding: 2px 0;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--pop);
+        }
+
+        .footer-more {
+            margin-top: 2px;
+        }
+
+        .footer-more summary {
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text);
+            padding: 2px 0;
+            transition: color 0.2s;
+        }
+
+        .footer-more summary:hover {
+            color: var(--pop);
+        }
+
+        .footer-more summary::marker {
+            color: var(--text-light);
+        }
+
+        .footer-more-links {
+            padding-left: 12px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--surface-border);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .footer-social a {
+            color: var(--text-light);
+            transition: color 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: var(--pop);
+        }
+
+        .footer-social svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ═══════════════════════ Responsive ═══════════════════════ */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-sub {
+                font-size: 17px;
+            }
+
+            .eyebrow {
+                font-size: 12px;
+            }
+
+            .fork-label {
+                font-size: 13px;
+                margin-bottom: 24px;
+            }
+
+            .fork-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .card-title {
+                font-size: 28px;
+            }
+
+            .card-body {
+                font-size: 16px;
+            }
+
+            .card-cta {
+                font-size: 14px;
+                padding: 12px 24px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero {
+                margin-bottom: 64px;
+            }
+
+            .page-wrapper {
+                padding: 64px 0;
+            }
+
+            .footer p {
+                font-size: 13px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-bottom-left {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 24px;
+            }
+
+            .nav {
+                padding: 24px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero-sub {
+                font-size: 17px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .fork-card {
+                padding: 28px 24px 24px;
+            }
+
+            .card-perks li {
+                font-size: 14px;
+                padding: 6px 0;
+            }
+
+            .card-tag {
+                font-size: 11px;
+            }
+
+            .card-flavor {
+                font-size: 12px;
+            }
+
+            .escape {
+                margin-top: 64px;
+            }
+
+            .escape p {
+                font-size: 14px;
+            }
+
+            .escape a {
+                font-size: 14px;
+            }
+        }
+
+        /* ═══════════════════════ Live Stat ═══════════════════════ */
+        .live-stat {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-light);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .live-stat.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .live-stat .stat-number {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--pop);
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════════════════ Nav ═══════════════════════ -->
+    <nav class="nav" role="navigation">
+        <a href="https://voiceprompter.app" class="nav-logo"><img src="/logo-icon-no-bg.svg" alt="" width="28"
+                height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;">VoicePrompter</a>
+    </nav>
+
+    <!-- ═══════════════════════ Page ═══════════════════════ -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            <!-- Hero -->
+            <div class="hero fade-up">
+                <h1>The best teleprompter<br>for every use case</h1>
+                <p class="hero-sub">The best voice scrolling technology on the market</p>
+
+                <div class="hero-ctas">
+                    <a href="/app/" class="escape-btn-web" data-umami-event="home-hero-open-app">Open free web app</a>
+                    <a href="https://apps.apple.com/app/apple-store/id6758573080?pt=128503212&ct=home-hero&mt=8"
+                        target="_blank" rel="noopener" class="escape-btn-mac" data-umami-event="home-hero-download-mac">
+                        <img src="/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg"
+                            alt="Download on the App Store">
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=app.voiceprompter&utm_source=voiceprompter.app&utm_medium=website&utm_campaign=home-hero"
+                        target="_blank" rel="noopener" class="escape-btn-mac" data-umami-event="home-hero-download-android">
+                        <img src="/GetItOnGooglePlay_Badge_Web_color_English.svg"
+                            alt="Get it on Google Play">
+                    </a>
+                </div>
+
+                <div class="live-stat" id="live-stat">
+                    <span>Trusted by <span class="stat-number" id="stat-creators">23,000+</span> creators and counting</span>
+                </div>
+            </div>
+
+            <!-- Fork Cards -->
+            <div class="fork-grid fade-up">
+
+                <!-- Web App Card -->
+                <div class="fork-card web">
+                    <span class="card-tag">Web App · 100% Free · Open Source</span>
+                    <h2 class="card-title">Web application<br><span class="card-subtitle">Web application</span></h2>
+                    <p class="card-body">No gates. No fees. No installation required.<br>Works on any device and follows
+                        your voice.</p>
+                    <ul class="card-perks">
+                        <li>Voice-activated scrolling</li>
+                        <li>Works offline as a PWA (installable web app)</li>
+                        <li>Mirror mode (flips text for teleprompter glass)</li>
+                        <li>34 languages, auto-detected</li>
+                        <li>Voice commands: back, forward, restart</li>
+                        <li>Built-in video recording</li>
+                        <li>Your scripts never leave your device</li>
+                    </ul>
+                    <a href="/web" class="card-cta" data-umami-event="home-cta-web-app">Learn more →</a>
+                    <p class="card-flavor">Free as in freedom</p>
+                </div>
+
+                <!-- Native Apps Card -->
+                <div class="fork-card mac">
+                    <span class="card-tag">Native apps · Free to try</span>
+                    <h2 class="card-title">Native applications</h2>
+                    <p class="card-body">Your script follows every word.<br>On desktop, phone, or tablet.</p>
+                    <ul class="card-perks">
+                        <li>Voice-activated scrolling</li>
+                        <li>Floats over other apps on Android, iPhone, and iPad</li>
+                        <li>Records video in up to 4K on supported phones and tablets</li>
+                        <li>Invisible on Mac screen shares and recordings</li>
+                        <li>40+ recognition locales on Android, 60+ on Apple devices</li>
+                        <li>Launches from clipboard in one click</li>
+                        <li>Private - everything on your device</li>
+                    </ul>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;">
+                        <a href="/mac" class="card-cta" data-umami-event="home-cta-mac-app">Mac</a>
+                        <a href="/ios" class="card-cta" data-umami-event="home-cta-ios-app">iPhone</a>
+                        <a href="/ipad" class="card-cta" data-umami-event="home-cta-ipad-app">iPad</a>
+                        <a href="/android" class="card-cta" data-umami-event="home-cta-android-app">Android</a>
+                    </div>
+                    <p class="card-flavor">Free to try · 3 scripts included</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ Reviews & FAQ styles ═══════════════════════ -->
+    <style>
+        .hero-proof {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* ───────────────────────── Reviews ───────────────────────── */
+        .reviews {
+            max-width: 1060px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 32px 8px;
+        }
+
+        .reviews h2 {
+            font-family: var(--font-serif);
+            font-size: 42px;
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 56px;
+            letter-spacing: -0.02em;
+        }
+
+        .reviews-sub {
+            text-align: center;
+            font-size: 15px;
+            color: var(--text-light);
+            margin: -40px auto 40px;
+            max-width: 560px;
+        }
+
+        /* Clipped wrapper: shows ~2 rows of the wall, fades out, expands on demand */
+        .reviews-wall-clip {
+            position: relative;
+            max-height: 760px;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .reviews-wall-clip::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 180px;
+            background: linear-gradient(to bottom, rgba(15, 15, 15, 0), var(--bg));
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .reviews-wall-clip.expanded::after {
+            opacity: 0;
+        }
+
+        .reviews-featured {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .reviews-featured .review-card {
+            margin-bottom: 20px;
+        }
+
+        /* Masonry wall via CSS columns */
+        .reviews-wall {
+            columns: 3;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 968px) {
+            .reviews-wall {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .reviews-featured {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-wall {
+                columns: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reviews h2 {
+                font-size: 32px;
+                margin-bottom: 36px;
+            }
+            .reviews-sub {
+                margin: -24px auto 32px;
+            }
+        }
+
+        .review-card {
+            display: inline-block;
+            width: 100%;
+            margin: 0 0 20px;
+            break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius);
+            padding: 26px 24px;
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .reviews-more {
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            flex-shrink: 0;
+            letter-spacing: 0.02em;
+        }
+
+        .review-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--accent);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .review-platform {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            color: var(--text-light);
+            opacity: 0.7;
+        }
+
+        .review-platform svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 2px;
+            color: var(--pop);
+            font-size: 15px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .review-title {
+            margin: 0 0 6px;
+            font-size: 16px;
+            line-height: 1.35;
+            color: var(--accent);
+        }
+
+        .review-original {
+            margin-top: 12px;
+        }
+
+        .review-original summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+            cursor: pointer;
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .review-original summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .review-original summary::after {
+            content: '+';
+            color: var(--pop);
+        }
+
+        .review-original[open] summary::after {
+            content: '−';
+        }
+
+        .review-original-title {
+            margin: 12px 0 6px;
+            color: var(--accent);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .review-original-text {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .review-text {
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* ───────────────────────── FAQ ───────────────────────── */
+        .faq {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 48px 32px 24px;
+        }
+
+        .faq h2 {
+            font-family: var(--font-serif);
+            font-size: 42px;
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 56px;
+            letter-spacing: -0.02em;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .faq-item summary {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--accent);
+            padding: 18px 24px;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-item summary::after {
+            content: '+';
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item[open] summary::after {
+            content: '−';
+        }
+
+        .faq-content {
+            padding: 0 24px 24px;
+            color: var(--text-light);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .faq-content a {
+            color: var(--pop);
+        }
+
+        /* Smooth expand/collapse so opening a question doesn't jump.
+           Progressive enhancement: browsers without ::details-content /
+           interpolate-size simply open instantly, as before. */
+        .faq-item {
+            interpolate-size: allow-keywords;
+        }
+
+        .faq-item::details-content {
+            opacity: 0;
+            block-size: 0;
+            overflow: hidden;
+            transition: block-size 0.35s ease, opacity 0.3s ease, content-visibility 0.35s allow-discrete;
+        }
+
+        .faq-item[open]::details-content {
+            opacity: 1;
+            block-size: auto;
+        }
+
+        .faq-list:not(.expanded) .faq-item:nth-child(n+6) {
+            display: none;
+        }
+
+        .faq-more {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .faq-more-btn {
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            transition: color 0.2s;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .faq-more-btn:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .faq h2 {
+                font-size: 32px;
+                margin-bottom: 36px;
+            }
+
+            .faq-item summary {
+                font-size: 15px;
+                padding: 16px 20px;
+            }
+
+            .faq-content {
+                padding: 0 20px 20px;
+                font-size: 14.5px;
+            }
+        }
+    </style>
+
+    <!-- ═══════════════════════ Reviews ═══════════════════════ -->
+    <section class="reviews fade-up" aria-label="What users are saying">
+        <h2>What users are saying</h2>
+
+        <p class="reviews-sub">Used by creators in 125+ countries</p>
+
+        <div class="reviews-wall-clip" id="reviews-wall-clip">
+            <div class="reviews-featured">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #0EA5E9, #6366F1);">H</div>
+                        <span class="review-name">Holdridge87</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Scroll by Voice is magic!</h3>
+                    <p class="review-text">"All the features promised in the video are REAL! :) Downloaded the app for the first time yesterday and in less than 5 minutes, I was all set up. The scroll by voice feature is super smooth and the interface is user friendly. Highly recommend for content creators and people who get nervous/off track doing live video presentations."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">B</div>
+                        <span class="review-name">Bert665</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Just one word… AMAZING!</h3>
+                    <p class="review-text">"I’ve used all the teleprompter app up there. VoicePrompter is just… AMAZING!. It is well worth every penny. The teleprompter app that we’ve been waiting for, truly. And the creator of this app is so responsive… you won’t believe how quick he is until you ask him a question or an app improvement (if you think he forgot something). Let me repeat myself: “this app is AMAZING!”."</p>
+                </div>
+            </div>
+
+            <div class="reviews-wall">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #3B82F6, #2563EB);">N</div>
+                        <span class="review-name">need a fix</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">VoicePrompter is all you need!</h3>
+                    <p class="review-text">"VoicePrompter is currently the ONLY teleprompting tool that gives more than enough flexibility to use it where you need it the most. No worries about script page activation speed, line spacing, or overall script size. The app works with almost any conferencing (ex: Zoom, Google Meet, and others!) and writing app. The developer is very responsive to feature requests. There is no excuse not to use this app as your teleprompter because it just works without complications."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #F97316, #FACC15);">S</div>
+                        <span class="review-name">sunblinksgallery</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Exactly what I needed!</h3>
+                    <p class="review-text">"The app is simple to use from the get go and it works flawlessly! I belong to a poetry club and we do recitations over FaceTime. I memorize the poems and use the prompter as a crutch in case I get performance anxiety and forget the next line. I have used it once and I already know it is going to boost my confidence and make me a better reciter!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #6366F1, #8B5CF6);">J</div>
+                        <span class="review-name">justlr.</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Super helpful on calls</h3>
+                    <p class="review-text">"This app really helps me on my sales calls. Instead of having my talking points on a sticky note, I now have them on my screen and they stay visible only to me even when I share my screen. It would be great if there were an option to skip a sentence or a full paragraph to make it even more flexible for my calls/demos. Great stuff, I’m here for the long run!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #A855F7, #EC4899);">S</div>
+                        <span class="review-name">Savioshe</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Easy and efficient</h3>
+                    <p class="review-text">"So many other teleprompters are complicated to work with on Zoom. This was smooth, easy to work with and when I needed support I got it quickly"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">J</div>
+                        <span class="review-name">Junk .</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Great app</h3>
+                    <p class="review-text">"The app works great. I was surprised that it recognizes my English so well. I am not a native English speaker and do have an accent, but it stills keeps up. Good job really. I record a lot of product demos and it already saved me time :)"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #EC4899, #DB2777);">G</div>
+                        <span class="review-name">Gio.Bru</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">The best teleprompter with voice recognition</h3>
+                    <p class="review-text">"I have used several teleprompters with voice recognition, but this is certainly the most robust, reliable, versatile, and customizable one I have ever tried. It is a native macOS app, so voice recognition is accurate and continuous even in Italian. It is customizable: it has various formatting settings, the option to make the text box invisible in screen recordings, and quick commands can be set from the menu bar. Recommended for anyone who works with fixed scripts and wants a teleprompter that follows them word for word."</p>
+                    <details class="review-original">
+                        <summary>Translated from Italian · Show original</summary>
+                        <h4 class="review-original-title">Il miglior teleprompter con riconoscimento vocale</h4>
+                        <p class="review-original-text">"Ho utilizzato diversi telepromter con riconoscimento vocale, ma questo è certamente il più robusto, affidabile, versatile e personalizzabile che abbia mai provato. È un’app nativa per Mac OS, quindi il riconoscimento vocale è preciso e continuo anche in lingua italiana. È personalizzabile: ha varie impostazioni di formattazione, la possibilità di rendere il box testuale invisibile nella registrazione dello schermo, si possono impostare comandi veloci dalla barra dei menu. Consigliato a chi lavora con testi fissi e vuole un teleprompter che lo segua parola per parola."</p>
+                    </details>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #3DDC84, #01875F);">M</div>
+                        <span class="review-name">Marc French Koala</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 2.5v19L21 12 3 2.5z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"WOW😲! This is a F*** AMAZING tool working with YOUR VOICE! Perfectly AUTOMATICALLY installed the vocabulary and immediately useful! There are different features to activate. It's worth it to buy the lifetime purchase because YOU will SAVE TIME compared to the other teleprompters (I've tried a lot of them). This one is a NO BRAINER once you know how to use the different features. BIG KUDOS for the developer! 🙌👏👍 Edit: the developer is very responsive, updates and corrects very quickly"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #64748B, #334155);">K</div>
+                        <span class="review-name">Kiteboard</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <h3 class="review-title">Game Changer</h3>
+                    <p class="review-text">"This product is amazing. It works on my computer and my iPhone. One suggestion, make it work on older iPads I’m not able to upgrade my operating system any longer, and this says it requires version 17 which my iPad cannot upgrade too, but it would certainly make my iPad valuable again"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #EF4444, #DC2626);">P</div>
+                        <span class="review-name">@phonehive</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Goshhhh! You literally are a life saviour brother. 🎉 loved the app"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #22C55E, #16A34A);">R</div>
+                        <span class="review-name">@RomanLoginovsky</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Nice job, Konstantin! This is exactly the app I was looking for!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">M</div>
+                        <span class="review-name">Macblessed4real</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1" /><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" /><line x1="6" y1="1" x2="6" y2="4" /><line x1="10" y1="1" x2="10" y2="4" /><line x1="14" y1="1" x2="14" y2="4" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I really needed this. You're a modern day angel, thank you."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #14B8A6, #0D9488);">A</div>
+                        <span class="review-name">@AqifAmir</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"THANK YOU SO MUCH THIS SAVED ME FOR MY SPEECH!!!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #E1306C, #F77737);">PB</div>
+                        <span class="review-name">Philipp Berezin</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The way everything functions feels clean and simple to use. And so far there isn't a proper alternative that delivers this kind of smooth experience. I'm about to start my own podcast... thank you for building something that actually solves a REAL problem."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">J</div>
+                        <span class="review-name">@JOMprodBeta</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"AMAZING WORK!!!!!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #0EA5E9, #0284C7);">E</div>
+                        <span class="review-name">@ericyoung524</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"You are a gem. Really appreciate for the amazing app and generosity."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #F97316, #EA580C);">C</div>
+                        <span class="review-name">@chatebillychilima6762</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Why make this open source tho... Bro this is gooood."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #FACC15, #EAB308);">P</div>
+                        <span class="review-name">Philipp</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1" /><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" /><line x1="6" y1="1" x2="6" y2="4" /><line x1="10" y1="1" x2="10" y2="4" /><line x1="14" y1="1" x2="14" y2="4" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"You did an amazing job!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #3B82F6, #2563EB);">C</div>
+                        <span class="review-name">@Clark-Mills</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Nice work, needs more exposure so hopefully that happens - it deserves to do well."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #FF4B2B, #FF416C);">H</div>
+                        <span class="review-name">@hellofayfay</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Absolutely fantastic!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #14B8A6, #0D9488);">J</div>
+                        <span class="review-name">James Thomas</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The tool you created is gold-plated all the way. I just used the app for a broadcast and it worked well. I am willing to help you get the word out to everyone who needed it yesterday!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">J</div>
+                        <span class="review-name">jzdb_</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I've been using the app since version 1, and it was already really good, but the 2.0 upgrade made it even better. I use it mostly for interviews and video calls, and it reduces my stress by quite a lot!"</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #06B6D4, #0891B2);">T</div>
+                        <span class="review-name">@ThisIsE</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I just gave the app a little run and I think it's amazing."</p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar" style="background: linear-gradient(135deg, #F43F5E, #E11D48);">U</div>
+                        <span class="review-name">App User</span>
+                        <div class="review-platform">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                        </div>
+                    </div>
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Very Very Very nice app. So much better than all the others I've used and subscribed to. VoicePrompter is AMAZING! I've been looking for a solution just like this for YEARS! Wow."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-more">
+            <button class="faq-more-btn" id="reviews-more-btn">Show more reviews</button>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ FAQ ═══════════════════════ -->
+    <section class="faq fade-up" id="faq" aria-label="Frequently asked questions">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>Is VoicePrompter free?</summary>
+                <div class="faq-content">
+                    Yes. The <a href="/web/">web app</a> is completely free and open source. The native <a href="/android/">Android</a>, <a href="/mac/">Mac</a>, <a href="/ios/">iPhone</a>, and <a href="/ipad/">iPad</a> apps are free to try with up to 3 custom scripts plus an unlimited demo script; paid plans, including a one-time Lifetime option, unlock more.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>How does voice-activated scrolling work?</summary>
+                <div class="faq-content">
+                    VoicePrompter matches your spoken words against your entire script in real time and scrolls only as you speak, pausing when you pause. The browser uses the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API" target="_blank" rel="noopener">Web Speech API</a>, Apple apps use <a href="https://developer.apple.com/documentation/speech" target="_blank" rel="noopener">Apple's Speech framework</a>, and Android uses the device's speech-recognition service.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>What is the difference between the free web app and the native apps?</summary>
+                <div class="faq-content">
+                    Both scroll with your voice. The <a href="/web/">web app</a> is free, open source, and runs in a browser with no download. The native <a href="/android/">Android</a>, <a href="/mac/">Mac</a>, <a href="/ios/">iPhone</a>, and <a href="/ipad/">iPad</a> apps add saved scripts, richer controls, 4K recording on mobile, floating picture-in-picture on phones and tablets, and an invisible screen-sharing window on Mac.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>How is VoicePrompter different from other teleprompter apps?</summary>
+                <div class="faq-content">
+                    Most teleprompters scroll at a fixed speed, or track only the next few words and stall the moment you improvise. VoicePrompter follows your voice against the whole script, so you can ad-lib, skip ahead, or backtrack and it keeps up - it even scrolls backward. It also stays invisible during screen shares on Mac, keeps everything on your device, and offers a one-time Lifetime purchase instead of forcing a subscription.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Does the teleprompter stay invisible during screen sharing?</summary>
+                <div class="faq-content">
+                    On Mac, yes. The app window is excluded from screen capture at the macOS level, so it stays invisible in Zoom, Google Meet, Teams, OBS, and QuickTime recordings while remaining visible only to you.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>What happens if I go off-script or skip a section?</summary>
+                <div class="faq-content">
+                    Nothing breaks. VoicePrompter matches your voice against the whole script, not just the next line, so it waits while you ad-lib and picks up as soon as you return to the text. Skip a section and it follows you there. You can also tap any word to continue from that exact spot.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>What platforms does it support?</summary>
+                <div class="faq-content">
+                    VoicePrompter has native apps for <a href="/android/">Android</a>, <a href="/mac/">macOS</a>, <a href="/ios/">iPhone</a>, and <a href="/ipad/">iPad</a>, plus a free web app that runs in Chrome, Edge, and Safari. Apple Universal Purchase covers the Mac, iPhone, and iPad apps; Google Play purchases are managed separately.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Does it work on Android or Windows?</summary>
+                <div class="faq-content">
+                    Yes. Android users can <a href="/android/">download the native VoicePrompter app from Google Play</a>, with whole-script voice scrolling, picture-in-picture over other apps, and in-app video recording. Windows users can use the free <a href="/web/">web app</a> in Chrome or Edge.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Is my script private?</summary>
+                <div class="faq-content">
+                    Your scripts stay on your device and no account is required. Apple apps and the web app can process speech locally; Android prefers on-device recognition but may use the installed system speech service for some device and language combinations.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Do I need to create an account?</summary>
+                <div class="faq-content">
+                    No account, sign-up, or email is required. The native apps use the relevant store account for purchases, while your scripts remain on your device.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>How many languages does it support?</summary>
+                <div class="faq-content">
+                    The Apple apps track 60+ languages, the Android app includes more than 40 recognition locales with availability depending on the device's speech service, and the free web app supports 34.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Can I add stage directions or notes I don't want to read out loud?</summary>
+                <div class="faq-content">
+                    Yes - put anything in square brackets and VoicePrompter will display it but skip it during voice scrolling. Useful for cues like [pause], [smile], or [check slide].
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Can I jump to a specific part of my script?</summary>
+                <div class="faq-content">
+                    Yes - tap any word on screen and VoicePrompter starts listening from exactly that point. Useful if you skip a section, restart a segment, or want to jump ahead.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Does it work without an internet connection?</summary>
+                <div class="faq-content">
+                    The native Apple apps run speech recognition on-device, and the free web app can be installed as an offline PWA. Android can use on-device recognition when a compatible language pack is installed; some devices and languages use the system speech service and may need a connection.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>How do I read a script naturally during a video call?</summary>
+                <div class="faq-content">
+                    Position the script window as close to your camera as possible, use voice-activated scrolling so you never touch the keyboard, and adjust font size and transparency so you can read comfortably while keeping eye contact.
+                </div>
+            </details>
+        </div>
+        <div class="faq-more">
+            <button class="faq-more-btn" onclick="(() => { const list = document.querySelector('.faq-list'); const expanded = list.classList.toggle('expanded'); this.textContent = expanded ? 'Show fewer FAQs' : 'Show more FAQs'; if (!expanded) document.getElementById('faq').scrollIntoView({ behavior: 'smooth', block: 'start' }); })()">Show more FAQs</button>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ Footer ═══════════════════════ -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="/web">Web App</a>
+                <a href="/android">Android App</a>
+                <a href="/mac">Mac App</a>
+                <a href="/ios">iPhone App</a>
+                <a href="/ipad">iPad App</a>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="/blog/">Blog</a>
+                <a href="/blog/top-10-teleprompter-software.html">Best Teleprompter Apps</a>
+                <a href="/blog/teleprompter-without-subscription.html">No-Subscription Options</a>
+                <a href="/blog/best-teleprompter-for-video-calls.html">Video Call Guide</a>
+                <details class="footer-more">
+                    <summary>More guides</summary>
+                    <div class="footer-more-links">
+                        <a href="/blog/teleprompter-for-youtube-videos.html">Teleprompter for YouTube</a>
+                        <a href="/blog/teleprompter-for-tiktok-and-reels.html">TikTok and Reels Guide</a>
+                        <a href="/blog/how-to-record-webinars-and-podcasts.html">Webinar and Podcast Guide</a>
+                    </div>
+                </details>
+            </div>
+            <div class="footer-col">
+                <h4>Help</h4>
+                <a href="https://www.youtube.com/@kosuvorov" target="_blank" rel="noopener">YouTube</a>
+                <a href="/support/">Support &amp; tutorials</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="/privacy">Privacy Policy</a>
+            </div>
+            <div class="footer-col">
+                <h4>Project</h4>
+                <a href="/changelog.html">Changelog</a>
+                <a href="https://github.com/kosuvorov/VoicePrompter" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://buymeacoffee.com/kosuvorov" target="_blank" rel="noopener">Buy me a coffee ☕</a>
+                <a href="https://github.com/kosuvorov/VoicePrompter" target="_blank" rel="noopener">Give a star on
+                    GitHub ⭐</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-left">
+                <p>Made by <a href="/about.html"
+                        style="color:var(--text-light);text-decoration:underline;text-underline-offset:2px;">Konstantin
+                        Suvorov</a> · © 2026 VoicePrompter</p>
+                <a href="https://startupfa.me/s/voiceprompter?utm_source=voiceprompter.app" target="_blank"
+                    rel="noopener" class="startup-fame-badge" data-umami-event="home-footer-startup-fame"
+                    style="margin-top:12px;">
+                    <img src="https://startupfa.me/badges/featured/dark.webp"
+                        alt="VoicePrompter - Featured on Startup Fame" width="171" height="54" />
+                </a>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.instagram.com/voiceprompter" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                </a>
+                <a href="https://www.tiktok.com/@voiceprompter" target="_blank" rel="noopener" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.83 4.83 0 0 1-1-.15z" />
+                    </svg>
+                </a>
+                <a href="https://www.youtube.com/@kosuvorov" target="_blank" rel="noopener" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════ Live Stats ═══════════════════════ -->
+    <script>
+        (function () {
+            const el = document.getElementById('stat-creators');
+            const container = document.getElementById('live-stat');
+            let currentValue = 0;
+            let animId = null;
+
+            function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+            function animateTo(from, to, duration) {
+                if (animId) cancelAnimationFrame(animId);
+                const startTime = performance.now();
+                function step(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    currentValue = Math.round(from + (to - from) * easeOutCubic(progress));
+                    el.textContent = currentValue.toLocaleString() + '+';
+                    if (progress < 1) { animId = requestAnimationFrame(step); }
+                }
+                animId = requestAnimationFrame(step);
+            }
+
+            // Start with fallback immediately
+            container.classList.add('visible');
+            animateTo(0, 23000, 1800);
+
+            // Fetch real data and continue from wherever we are
+            fetch('https://umami-proxy.kosuvorov.workers.dev/')
+                .then(r => r.json())
+                .then(data => {
+                    let real = data.allTime && data.allTime.visitors;
+                    if (real) {
+                        real = Math.max(1000, Math.floor(real / 100) * 100);
+                        setTimeout(() => animateTo(currentValue, real, 1000), 200);
+                    }
+                })
+                .catch(() => { });
+        })();
+    </script>
+
+    <!-- Scroll Reveal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+    <!-- ═══════════════════════ Reviews Wall ═══════════════════════ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const clip = document.getElementById('reviews-wall-clip');
+            const btn = document.getElementById('reviews-more-btn');
+            if (!clip || !btn) return;
+
+            const showAllLabel = 'Show more reviews';
+
+            // If everything already fits (few reviews / wide screen), hide the button
+            if (clip.scrollHeight <= clip.clientHeight) {
+                btn.parentElement.style.display = 'none';
+                clip.classList.add('expanded');
+                return;
+            }
+
+            // After the expand animation, release the height cap so the wall
+            // can reflow freely on window resizes.
+            clip.addEventListener('transitionend', (e) => {
+                if (e.propertyName === 'max-height' && clip.classList.contains('expanded')) {
+                    clip.style.maxHeight = 'none';
+                }
+            });
+
+            // If the transition never fires (reduced motion, hidden tab),
+            // keep the pinned cap in sync with the wall's real height.
+            window.addEventListener('resize', () => {
+                if (clip.classList.contains('expanded') && clip.style.maxHeight && clip.style.maxHeight !== 'none') {
+                    clip.style.maxHeight = clip.scrollHeight + 'px';
+                }
+            });
+
+            btn.addEventListener('click', () => {
+                if (!clip.classList.contains('expanded')) {
+                    clip.classList.add('expanded');
+                    clip.style.maxHeight = clip.scrollHeight + 'px';
+                    btn.textContent = 'Show fewer reviews';
+                } else {
+                    // Animate back down: pin current height, then let the CSS cap take over
+                    clip.style.maxHeight = clip.scrollHeight + 'px';
+                    void clip.offsetHeight;
+                    clip.classList.remove('expanded');
+                    clip.style.maxHeight = '';
+                    btn.textContent = showAllLabel;
+                    document.querySelector('.reviews').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

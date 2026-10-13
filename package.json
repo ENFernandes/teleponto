@@ -1,0 +1,29 @@
+{
+  "name": "teleprompter-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build-changelog.js && node scripts/build-use-cases.js && vite",
+    "build:changelog": "node scripts/build-changelog.js",
+    "build:blog": "node scripts/build-blog.js",
+    "build:use-cases": "node scripts/build-use-cases.js",
+    "build": "npm run build:changelog && npm run build:blog && npm run build:use-cases && tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^0.16.7",
+    "wrangler": "^4.111.0"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.1",
+    "tinyld": "^1.3.4"
+  }
+}
