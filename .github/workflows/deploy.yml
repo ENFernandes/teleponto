@@ -1,10 +1,8 @@
 name: Deploy to GitHub Pages
 
+# Só corre à mão (Actions → Run workflow). Publicar exige o «sim» do Elder.
 on:
-  push:
-    branches:
-      - main
-      - staging
+  workflow_dispatch:
 
 jobs:
   deploy:

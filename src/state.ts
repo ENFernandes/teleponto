@@ -41,7 +41,6 @@ export const state: AppState = {
     mediaRecorder: null,
     mediaStream: null,
     recordedChunks: [],
-    googleDocUrl: null,
     selectedVideoDeviceId: null,
     selectedAudioDeviceId: null
 };

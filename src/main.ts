@@ -9,9 +9,7 @@ import { saveToHistory, getHistory, clearAllHistory } from './storage';
 import { ScriptWord, ScrollingMode } from './types';
 import { enterVideoMode, exitVideoMode, toggleVideoLayout, startRecording, stopRecording, flipCamera, getMediaConstraints } from './video';
 import { detectAll } from 'tinyld/light';
-import { fetchGoogleDocText } from './gdoc';
 import { enumerateAndPopulateDevices } from './devices';
-import { detectVisitorPlatform, getNativePromo } from './platform-promo';
 
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
@@ -206,6 +204,9 @@ function updateAutoDetectText(detectedVal: string | null) {
     });
 }
 
+// Declarado cedo: boot() pode chamar pinDockToVisualViewport() antes do fim do módulo.
+let dockPinned = false;
+
 // --- PWA Update Handling ---
 registerSW({ immediate: true });
 
@@ -225,15 +226,13 @@ function showLangDetectionWarning() {
 
 // --- Main Logic ---
 
-function loadScript(text: string, googleDocUrl: string | null = null): void {
+function loadScript(text: string): void {
     if (!text) return;
     const scriptText = text.trim();
     if (!scriptText) return;
 
-    state.googleDocUrl = googleDocUrl;
-
     // Save to history (unless it's a reload of the same text, handled by storage)
-    saveToHistory(scriptText, googleDocUrl);
+    saveToHistory(scriptText);
 
     // Detect language and update Speech Recognition
     let targetLang = state.languageSetting;
@@ -396,13 +395,11 @@ function clearHistory(): void {
 
 // Load Script Button
 els.loadScriptBtn.addEventListener('click', () => {
-    (window as any).umami?.track('start-teleprompter');
     loadScript(els.inputScript.value);
 });
 
 // Clear Script Button
 els.clearScriptBtn.addEventListener('click', () => {
-    (window as any).umami?.track('clear-script');
     els.inputScript.value = '';
     els.inputScript.focus();
 });
@@ -411,7 +408,6 @@ els.clearScriptBtn.addEventListener('click', () => {
 els.copyScriptBtn.addEventListener('click', async () => {
     const text = els.inputScript.value;
     if (!text) return;
-    (window as any).umami?.track('copy-script');
     try {
         await navigator.clipboard.writeText(text);
         const originalText = els.copyScriptBtn.textContent;
@@ -423,135 +419,12 @@ els.copyScriptBtn.addEventListener('click', async () => {
 
 // Paste Script Button
 els.pasteScriptBtn.addEventListener('click', async () => {
-    (window as any).umami?.track('paste-script');
     try {
         const text = await navigator.clipboard.readText();
         els.inputScript.value = text;
         els.inputScript.focus();
     } catch (err) {
         console.error('Failed to paste!', err);
-    }
-});
-
-// --- Google Doc Event Listeners ---
-
-// Show Import Modal
-els.importGoogleDocBtn.addEventListener('click', () => {
-    (window as any).umami?.track('open-google-doc-modal');
-    els.googleDocUrlInput.value = '';
-    els.googleDocModal.classList.remove('hidden');
-    els.googleDocUrlInput.focus();
-});
-
-// Close Import Modal
-els.closeGoogleDocModalBtn.addEventListener('click', () => {
-    els.googleDocModal.classList.add('hidden');
-});
-
-// Paste Google Doc Link Button
-els.pasteGoogleDocUrlBtn.addEventListener('click', async () => {
-    (window as any).umami?.track('paste-google-doc-url');
-    try {
-        const text = await navigator.clipboard.readText();
-        els.googleDocUrlInput.value = text.trim();
-        els.googleDocUrlInput.focus();
-    } catch (err) {
-        console.error('Failed to paste Google Doc URL!', err);
-    }
-});
-
-// Confirm Import from Google Doc
-els.confirmGoogleDocImportBtn.addEventListener('click', async () => {
-    const url = els.googleDocUrlInput.value.trim();
-    if (!url) {
-        alert('Please enter a Google Doc URL.');
-        return;
-    }
-
-    const btn = els.confirmGoogleDocImportBtn as HTMLButtonElement;
-    const originalText = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = 'Importing...';
-
-    try {
-        const text = await fetchGoogleDocText(url);
-        (window as any).umami?.track('import-google-doc-success');
-        
-        els.inputScript.value = text;
-        els.googleDocModal.classList.add('hidden');
-        
-        // Load script and pass the URL to state/history
-        loadScript(text, url);
-    } catch (err: any) {
-        (window as any).umami?.track('import-google-doc-error', { error: err.message });
-        alert(err.message || 'Failed to import document.');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = originalText;
-    }
-});
-
-// Refresh Google Doc from Settings
-els.refreshGoogleDocBtn.addEventListener('click', async () => {
-    const url = state.googleDocUrl;
-    if (!url) return;
-
-    (window as any).umami?.track('refresh-google-doc-click');
-    const btn = els.refreshGoogleDocBtn as HTMLButtonElement;
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.textContent = 'Syncing...';
-
-    try {
-        const text = await fetchGoogleDocText(url);
-        (window as any).umami?.track('refresh-google-doc-success');
-
-        els.inputScript.value = text;
-
-        // Preserve current index if applicable
-        const prevIndex = state.currentIndex;
-        
-        loadScript(text, url);
-
-        // Restore position as close as possible
-        if (prevIndex < state.scriptWords.length) {
-            state.currentIndex = prevIndex;
-            updateHighlight();
-            scrollToCurrent();
-        }
-
-        btn.textContent = 'Synced!';
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }, 1500);
-    } catch (err: any) {
-        (window as any).umami?.track('refresh-google-doc-error', { error: err.message });
-        alert(err.message || 'Failed to refresh document.');
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-    }
-});
-
-// Copy Google Doc URL from Settings
-els.copyGoogleDocUrlBtn.addEventListener('click', async () => {
-    const url = state.googleDocUrl;
-    if (!url) return;
-
-    (window as any).umami?.track('copy-google-doc-url-click');
-    try {
-        await navigator.clipboard.writeText(url);
-        
-        // Show brief visual checkmark on the icon, and show alert
-        const originalHTML = els.copyGoogleDocUrlBtn.innerHTML;
-        els.copyGoogleDocUrlBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
-        
-        alert('Google Doc link copied to clipboard!');
-        
-        els.copyGoogleDocUrlBtn.innerHTML = originalHTML;
-    } catch (err) {
-        console.error('Failed to copy Google Doc link:', err);
-        alert('Failed to copy link. Please manually copy it from the browser address bar.');
     }
 });
 
@@ -567,7 +440,6 @@ els.micButton.addEventListener('click', async () => {
 
     if (state.isListening) {
         if (state.config.scrollingMode === 'voice') {
-            (window as any).umami?.track('mic-stop');
             stopListening();
         } else {
             autoScrollManager.stop();
@@ -579,7 +451,6 @@ els.micButton.addEventListener('click', async () => {
         if (dock) dock.style.opacity = '';
     } else {
         if (state.config.scrollingMode === 'voice') {
-            (window as any).umami?.track('mic-start');
             startListening();
         } else {
             isAutoScrollStarting = true;
@@ -607,107 +478,19 @@ els.resetAppBtn.addEventListener('click', resetApp);
 // Restart Script Button
 els.restartScriptBtn.addEventListener('click', restartScript);
 
-const visitorPlatform = detectVisitorPlatform();
-const nativePromo = getNativePromo(visitorPlatform);
-els.nativePromoTitle.textContent = nativePromo.title;
-
-let promoTimeout: number | null = null;
-let currentPromoPairIndex = 0;
-let currentPromoPairStatic = '';
-let currentPromoWord = '';
-
-function startPromoAnimation() {
-    if (promoTimeout) {
-        window.clearTimeout(promoTimeout);
-        promoTimeout = null;
-    }
-
-    const subtitleEl = els.nativePromoSubtitle;
-
-    const pair = nativePromo.pairs[currentPromoPairIndex];
-    currentPromoPairIndex = (currentPromoPairIndex + 1) % nativePromo.pairs.length;
-    
-    currentPromoPairStatic = pair.line1;
-
-    if (pair.rotating.length === 0) {
-        currentPromoWord = '';
-        subtitleEl.innerHTML = `<div>${pair.line1}</div><div>${pair.line2}</div>`;
-        return;
-    }
-
-    let currentIndex = 0;
-    currentPromoWord = pair.rotating[currentIndex];
-
-    subtitleEl.innerHTML = `<div>${pair.line1}</div><div class="flex items-center">${pair.line2}<span class="promo-rotating-word inline-block transition-all duration-500 opacity-100 translate-y-0 text-[#FFBB00] font-medium whitespace-nowrap ml-1">${pair.rotating[currentIndex]}</span></div>`;
-
-    const rotatingEl = subtitleEl.querySelector('.promo-rotating-word') as HTMLElement;
-
-    function animateNextWord() {
-        promoTimeout = window.setTimeout(() => {
-            if (!document.body.contains(rotatingEl)) return;
-
-            rotatingEl.classList.remove('opacity-100', 'translate-y-0');
-            rotatingEl.classList.add('opacity-0', '-translate-y-2');
-
-            promoTimeout = window.setTimeout(() => {
-                if (!document.body.contains(rotatingEl)) return;
-                currentIndex = (currentIndex + 1) % pair.rotating.length;
-                currentPromoWord = pair.rotating[currentIndex];
-                rotatingEl.textContent = pair.rotating[currentIndex];
-
-                rotatingEl.classList.remove('-translate-y-2', 'transition-all', 'duration-500');
-                rotatingEl.classList.add('translate-y-2');
-
-                void rotatingEl.offsetWidth;
-
-                rotatingEl.classList.add('transition-all', 'duration-500');
-                rotatingEl.classList.remove('opacity-0', 'translate-y-2');
-                rotatingEl.classList.add('opacity-100', 'translate-y-0');
-
-                animateNextWord();
-            }, 500);
-        }, 1500);
-    }
-
-    animateNextWord();
-}
-
-function stopPromoAnimation() {
-    if (promoTimeout) {
-        window.clearTimeout(promoTimeout);
-        promoTimeout = null;
-    }
-}
-
 // Toggle Settings
 els.toggleSettingsBtn.addEventListener('click', () => {
-    (window as any).umami?.track('settings-toggle');
     const isHidden = els.settingsPanel.classList.toggle('hidden');
     if (!isHidden) {
-        startPromoAnimation();
         if (!isIOS) {
             enumerateAndPopulateDevices(false);
         }
-    } else {
-        stopPromoAnimation();
     }
 });
 
 // Close Settings
 els.closeSettingsBtn.addEventListener('click', () => {
     els.settingsPanel.classList.add('hidden');
-    stopPromoAnimation();
-});
-
-// Native App Promo Card Banner
-els.settingsNativeAppBanner.addEventListener('click', () => {
-    const promoData = currentPromoWord ? `${currentPromoPairStatic} - ${currentPromoWord}` : currentPromoPairStatic;
-    (window as any).umami?.track(nativePromo.analyticsEvent, {
-        destination: nativePromo.href,
-        sourcePlatform: visitorPlatform,
-        variant: promoData
-    });
-    window.location.href = nativePromo.href;
 });
 
 // Font Size Slider
@@ -855,7 +638,6 @@ els.stopSignToggle.addEventListener('change', (e) => {
 });
 
 function handleLanguageChange(lang: string) {
-    (window as any).umami?.track('language-select', { language: lang });
     state.languageSetting = lang;
 
     // if auto, re-detect if there is a script
@@ -941,7 +723,7 @@ els.highlightActiveWordToggle.addEventListener('change', (e) => {
 });
 
 // Font Family Buttons
-(['mono', 'sans', 'serif', 'comicSans', 'openDyslexic'] as const).forEach(font => {
+(['mono', 'sans', 'serif', 'comicSans'] as const).forEach(font => {
     els.fontFamilyBtns[font].addEventListener('click', () => {
         state.config.fontFamily = font;
         applySettings();
@@ -1111,7 +893,7 @@ function updateDirectionButtons(): void {
 }
 
 function updateFontFamilyButtons(): void {
-    (['mono', 'sans', 'serif', 'comicSans', 'openDyslexic'] as const).forEach(font => {
+    (['mono', 'sans', 'serif', 'comicSans'] as const).forEach(font => {
         const btn = els.fontFamilyBtns[font];
         const isActive = state.config.fontFamily === font;
         btn.classList.toggle('bg-neutral-700', isActive);
@@ -1295,7 +1077,6 @@ window.addEventListener('pageshow', () => {
 // Idempotent: called from both module-eval and DOMContentLoaded so the dock is
 // pinned regardless of which fires first (with async module loading either can
 // win). A guard flag ensures listeners/observers are only wired once.
-let dockPinned = false;
 function pinDockToVisualViewport(): void {
     const dock = document.getElementById('mainControlsDock');
     const vv = window.visualViewport;

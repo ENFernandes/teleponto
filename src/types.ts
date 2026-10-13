@@ -53,7 +53,6 @@ export interface AppState {
     mediaRecorder: MediaRecorder | null;
     mediaStream: MediaStream | null;
     recordedChunks: Blob[];
-    googleDocUrl: string | null;
     selectedVideoDeviceId: string | null;
     selectedAudioDeviceId: string | null;
 }
@@ -64,5 +63,4 @@ export interface HistoryItem {
     preview: string;
     date: string;
     tag?: string;
-    googleDocUrl?: string;
 }

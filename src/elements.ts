@@ -66,10 +66,6 @@ export interface Elements {
     // Language Selection
     languageSelectContainer: HTMLElement;
     languageSelectSettingsContainer: HTMLElement;
-    // Native App Promo Card
-    settingsNativeAppBanner: HTMLElement;
-    nativePromoTitle: HTMLElement;
-    nativePromoSubtitle: HTMLElement;
     // Toggles
     preserveFormattingToggle: HTMLInputElement;
     voiceCommandToggle: HTMLInputElement;
@@ -82,7 +78,6 @@ export interface Elements {
         sans: HTMLElement;
         serif: HTMLElement;
         comicSans: HTMLElement;
-        openDyslexic: HTMLElement;
     };
     scrollingModeSelect: HTMLSelectElement;
     scrollingModeDescription: HTMLElement;
@@ -102,16 +97,6 @@ export interface Elements {
     videoStopBtn: HTMLElement;
     videoControls: HTMLElement;
     videoRecordingIndicator: HTMLElement;
-    // Google Doc Integration
-    importGoogleDocBtn: HTMLElement;
-    googleDocModal: HTMLElement;
-    googleDocUrlInput: HTMLInputElement;
-    confirmGoogleDocImportBtn: HTMLElement;
-    closeGoogleDocModalBtn: HTMLElement;
-    pasteGoogleDocUrlBtn: HTMLElement;
-    refreshGoogleDocBtn: HTMLElement;
-    refreshGoogleDocContainer: HTMLElement;
-    copyGoogleDocUrlBtn: HTMLElement;
     videoDeviceSelect: HTMLSelectElement;
     audioDeviceSelect: HTMLSelectElement;
     devicesSelectionContainer: HTMLElement;
@@ -188,10 +173,6 @@ export function initElements(): void {
         // Language Selection
         languageSelectContainer: document.getElementById('languageSelectContainer')!,
         languageSelectSettingsContainer: document.getElementById('languageSelectSettingsContainer')!,
-        // Native App Promo Card
-        settingsNativeAppBanner: document.getElementById('settings-native-app-banner')!,
-        nativePromoTitle: document.getElementById('nativePromoTitle')!,
-        nativePromoSubtitle: document.getElementById('nativePromoSubtitle')!,
         // Toggles
         preserveFormattingToggle: document.getElementById('preserveFormattingToggle') as HTMLInputElement,
         voiceCommandToggle: document.getElementById('voiceCommandToggle') as HTMLInputElement,
@@ -203,8 +184,7 @@ export function initElements(): void {
             mono: document.getElementById('fontFamilyMonoBtn')!,
             sans: document.getElementById('fontFamilySansBtn')!,
             serif: document.getElementById('fontFamilySerifBtn')!,
-            comicSans: document.getElementById('fontFamilyComicSansBtn')!,
-            openDyslexic: document.getElementById('fontFamilyOpenDyslexicBtn')!
+            comicSans: document.getElementById('fontFamilyComicSansBtn')!
         },
         scrollingModeSelect: document.getElementById('scrollingModeSelect') as HTMLSelectElement,
         scrollingModeDescription: document.getElementById('scrollingModeDescription')!,
@@ -224,16 +204,6 @@ export function initElements(): void {
         videoStopBtn: document.getElementById('videoStopBtn')!,
         videoControls: document.getElementById('videoControls')!,
         videoRecordingIndicator: document.getElementById('videoRecordingIndicator')!,
-        // Google Doc Integration
-        importGoogleDocBtn: document.getElementById('importGoogleDocBtn')!,
-        googleDocModal: document.getElementById('googleDocModal')!,
-        googleDocUrlInput: document.getElementById('googleDocUrlInput') as HTMLInputElement,
-        confirmGoogleDocImportBtn: document.getElementById('confirmGoogleDocImportBtn')!,
-        closeGoogleDocModalBtn: document.getElementById('closeGoogleDocModalBtn')!,
-        pasteGoogleDocUrlBtn: document.getElementById('pasteGoogleDocUrlBtn')!,
-        refreshGoogleDocBtn: document.getElementById('refreshGoogleDocBtn')!,
-        refreshGoogleDocContainer: document.getElementById('refreshGoogleDocContainer')!,
-        copyGoogleDocUrlBtn: document.getElementById('copyGoogleDocUrlBtn')!,
         videoDeviceSelect: document.getElementById('videoDeviceSelect') as HTMLSelectElement,
         audioDeviceSelect: document.getElementById('audioDeviceSelect') as HTMLSelectElement,
         devicesSelectionContainer: document.getElementById('devicesSelectionContainer')!
