@@ -93,6 +93,6 @@ Depois: Chrome → «Adicionar ao ecrã principal».
 | 2 — Conforto e gravação | Feita, mais definições guardadas e abrir com o último guião. | `73bc826` |
 | 3A — Modo som a gravar no Android | Feita (mesmo commit). Testada no browser com câmara e microfone simulados. | `73bc826` |
 | 3B — Vosk | Por fazer (spike). | — |
-| 4 — No telemóvel | À espera do «sim» do Elder para o GitHub Pages. | — |
+| 4 — No telemóvel | Publicado com o «sim» do Elder: https://enfernandes.github.io/teleponto/ (repo ENFernandes/teleponto). Deploy só à mão: Actions → Deploy to GitHub Pages → Run workflow, ou `gh workflow run deploy.yml`. | `8f82962` |
 
 Por confirmar no telemóvel do Elder: o conflito do microfone no Android, o formato vertical do vídeo gravado e a precisão do reconhecimento com a voz dele.
