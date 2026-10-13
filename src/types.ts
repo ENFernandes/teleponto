@@ -31,6 +31,7 @@ export interface AppConfig {
     scrollingMode: ScrollingMode;
     scrollSpeed: number; // Words per second
     soundSensitivity: number; // 0 to 1
+    fullscreenOnStart: boolean;
 }
 
 export interface AppState {

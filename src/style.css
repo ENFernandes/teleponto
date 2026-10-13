@@ -274,3 +274,16 @@ input[type=range]::-moz-range-track {
         border-left: 2px solid rgba(255, 255, 255, 0.1);
     }
 }
+/* Contagem 3-2-1 antes de gravar */
+.countdown-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10003;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 min(40vw, 40vh)/1 ui-sans-serif, system-ui, sans-serif;
+    color: #FFBB00;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+}

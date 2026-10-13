@@ -11,7 +11,7 @@ class AutoScrollManager {
     private accumulator: number = 0;
     private lastSoundTime: number = 0;
     private readonly soundHoldDuration: number = 250; // ms
-    private mediaStream: MediaStream | null = null;
+    private mediaStream: MediaStream | null = null; // só o microfone que esta classe abriu
     private sessionId: number = 0;
 
     public async start(): Promise<boolean> {
@@ -46,19 +46,24 @@ class AutoScrollManager {
 
     private async startAudioMonitor(sessionId: number): Promise<boolean> {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: state.selectedAudioDeviceId ? { deviceId: { exact: state.selectedAudioDeviceId } } : true 
-            });
+            // A gravar, usa o microfone do vídeo: no Android não se pode abrir um segundo.
+            const shared = state.isVideoMode && state.mediaStream && state.mediaStream.getAudioTracks().length > 0;
+            const stream = shared
+                ? new MediaStream(state.mediaStream!.getAudioTracks())
+                : await navigator.mediaDevices.getUserMedia({
+                    audio: state.selectedAudioDeviceId ? { deviceId: { exact: state.selectedAudioDeviceId } } : true
+                });
 
             // The mode may have changed while the browser permission prompt was open.
             if (sessionId !== this.sessionId || state.config.scrollingMode !== 'sound') {
-                stream.getTracks().forEach(track => track.stop());
+                if (!shared) stream.getTracks().forEach(track => track.stop());
                 return false;
             }
-            this.mediaStream = stream;
+            this.mediaStream = shared ? null : stream;
             
             const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
             this.audioContext = new AudioContextClass();
+            this.audioContext!.resume().catch(() => {});
             this.analyser = this.audioContext.createAnalyser();
             this.analyser.fftSize = 256;
             this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);

@@ -10,9 +10,11 @@ function applyCameraMirror(): void {
 }
 
 export function getMediaConstraints(): MediaStreamConstraints {
+    // 1080p a 30 fps; com o telemóvel na vertical o Chrome entrega a imagem na vertical (9:16)
     const videoConstraints: any = {
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        frameRate: { ideal: 30 }
     };
     
     if (state.selectedVideoDeviceId) {
@@ -59,13 +61,9 @@ export async function enterVideoMode(): Promise<void> {
             scrollToCurrent();
         }, 50);
 
-        if (/Android/i.test(navigator.userAgent)) {
-            els.androidVideoWarning.classList.remove('hidden');
-        }
-
     } catch (err) {
         console.error('Failed to access camera:', err);
-        alert('Could not access your camera. Please allow camera and microphone permissions.');
+        alert('Não foi possível usar a câmara. Autorize a câmara e o microfone.');
     }
 }
 
@@ -98,7 +96,7 @@ export async function flipCamera(): Promise<void> {
         // Device may not have the requested camera — revert.
         console.error('Failed to switch camera:', err);
         state.facingMode = previous;
-        alert('Could not switch camera. This device may only have one camera.');
+        alert('Não foi possível trocar de câmara. Este aparelho pode ter só uma.');
     }
 }
 
@@ -157,15 +155,39 @@ function applyVideoLayout(): void {
 
     if (state.videoLayoutMode === 'split') {
         els.prompterContainer.classList.add('video-mode-split');
-        els.videoLayoutToggleBtn.textContent = '⬜ Overlay';
-        els.videoLayoutToggleBtn.title = 'Switch to overlay mode';
+        els.videoLayoutToggleBtn.textContent = 'Sobrepor';
+        els.videoLayoutToggleBtn.title = 'Texto por cima da imagem';
         els.scrollContainer.style.backgroundColor = state.config.bgColor;
     } else {
         els.prompterContainer.classList.add('video-mode-overlay');
-        els.videoLayoutToggleBtn.textContent = '⬜ Split';
-        els.videoLayoutToggleBtn.title = 'Switch to split mode';
+        els.videoLayoutToggleBtn.textContent = 'Dividir';
+        els.videoLayoutToggleBtn.title = 'Texto e imagem lado a lado';
         els.scrollContainer.style.backgroundColor = '';
     }
+}
+
+let countdownActive = false;
+
+/** Contagem 3-2-1 no ecrã e depois começa a gravar. Devolve false se não gravou. */
+export async function startRecordingWithCountdown(seconds = 3): Promise<boolean> {
+    if (!state.mediaStream || state.isRecording || countdownActive) return false;
+    countdownActive = true;
+    const overlay = document.createElement('div');
+    overlay.className = 'countdown-overlay';
+    overlay.setAttribute('aria-live', 'assertive');
+    document.body.appendChild(overlay);
+    try {
+        for (let n = seconds; n > 0; n--) {
+            overlay.textContent = String(n);
+            await new Promise(r => setTimeout(r, 1000));
+            if (!state.isVideoMode) return false; // saiu do modo vídeo a meio da contagem
+        }
+    } finally {
+        overlay.remove();
+        countdownActive = false;
+    }
+    startRecording();
+    return state.isRecording;
 }
 
 export function startRecording(): void {
@@ -194,7 +216,7 @@ export function startRecording(): void {
 
     try {
         state.mediaRecorder = selectedMimeType
-            ? new MediaRecorder(state.mediaStream, { mimeType: selectedMimeType })
+            ? new MediaRecorder(state.mediaStream, { mimeType: selectedMimeType, videoBitsPerSecond: 8_000_000 })
             : new MediaRecorder(state.mediaStream);
     } catch (e) {
         state.mediaRecorder = new MediaRecorder(state.mediaStream);
@@ -252,7 +274,7 @@ function downloadRecording(): void {
 
     const now = new Date();
     const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
-    a.download = `voiceprompter-recording-${timestamp}.${extension}`;
+    a.download = `teleponto-${timestamp}.${extension}`;
 
     a.href = url;
     document.body.appendChild(a);

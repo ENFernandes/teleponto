@@ -8,11 +8,11 @@ export const state: AppState = {
     isMirrored: false,
     isMirroredH: false,
     isScreenRotated: false,
-    selectedLanguage: 'en-US', // Target language for SpeechRecognition
-    languageSetting: 'auto', // User's dropdown preference
+    selectedLanguage: 'pt-PT', // Target language for SpeechRecognition
+    languageSetting: 'pt-PT', // User's dropdown preference
     detectedLanguage: null,
     config: {
-        fontSize: 40,
+        fontSize: 48,
         lineHeight: 1.0,
         margin: 0,
         textColor: '#ffffff',
@@ -25,13 +25,14 @@ export const state: AppState = {
         paragraphSpacing: 0.5,
         smoothAnimations: false,
         highlightActiveWord: true,
-        activeLinePosition: 35, // Default to 35% from top
+        activeLinePosition: 20, // perto do topo, junto à câmara frontal
         lookaheadWords: 5, // Default lookahead
         dockOpacity: 50, // Default dock opacity (50%)
-        fontFamily: 'mono', // Default font
+        fontFamily: 'sans', // Default font
         scrollingMode: 'voice',
         scrollSpeed: 3.5,
-        soundSensitivity: 0.75
+        soundSensitivity: 0.75,
+        fullscreenOnStart: true
     },
     // Video recording state
     isVideoMode: false,

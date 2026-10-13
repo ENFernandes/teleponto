@@ -27,6 +27,7 @@ export interface Elements {
     micIcon: HTMLElement;
     statusIndicator: HTMLElement;
     mirrorToggle: HTMLInputElement;
+    fullscreenToggle: HTMLInputElement;
     mirrorModeLabel: HTMLElement;
     hMirrorRow: HTMLElement;
     hMirrorToggle: HTMLInputElement;
@@ -134,6 +135,7 @@ export function initElements(): void {
         micIcon: document.getElementById('micIcon')!,
         statusIndicator: document.getElementById('statusIndicator')!,
         mirrorToggle: document.getElementById('mirrorToggle') as HTMLInputElement,
+        fullscreenToggle: document.getElementById('fullscreenToggle') as HTMLInputElement,
         mirrorModeLabel: document.getElementById('mirrorModeLabel')!,
         hMirrorRow: document.getElementById('hMirrorRow')!,
         hMirrorToggle: document.getElementById('hMirrorToggle') as HTMLInputElement,

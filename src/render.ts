@@ -221,6 +221,9 @@ export function applySettings(): void {
         els.scrollContainer.style.backgroundColor = state.config.bgColor;
     }
 
+    els.scriptContent.style.fontSize = `${state.config.fontSize}px`;
+    els.scriptContent.style.paddingLeft = `${state.config.margin}%`;
+    els.scriptContent.style.paddingRight = `${state.config.margin}%`;
     els.scriptContent.style.setProperty('--paragraph-spacing', `${state.config.paragraphSpacing}em`);
     els.scriptContent.style.lineHeight = `${state.config.lineHeight}`;
     els.scriptContent.style.textAlign = state.config.textAlign;
@@ -258,7 +261,7 @@ export function updateMicUI(isListening: boolean): void {
         els.micButton.classList.add('bg-red-600', 'hover:bg-red-700', 'animate-pulse');
         els.micIcon.classList.add('text-white');
         
-        els.statusIndicator.textContent = isVoice ? "Listening..." : "Scrolling...";
+        els.statusIndicator.textContent = isVoice ? "A ouvir…" : "A rolar…";
         els.statusIndicator.classList.remove('text-neutral-500');
         els.statusIndicator.classList.add('text-red-500');
         
@@ -275,7 +278,7 @@ export function updateMicUI(isListening: boolean): void {
         els.micButton.classList.remove('bg-red-600', 'hover:bg-red-700', 'animate-pulse');
         els.micIcon.classList.remove('text-white');
         
-        els.statusIndicator.textContent = isVoice ? "Tap mic to start" : "Tap play to start";
+        els.statusIndicator.textContent = isVoice ? "Toque no microfone para começar" : "Toque em ▶ para começar";
         els.statusIndicator.classList.add('text-neutral-500');
         els.statusIndicator.classList.remove('text-red-500');
         
@@ -290,13 +293,17 @@ export function updateMicUI(isListening: boolean): void {
     }
 }
 
+function escapeHtml(text: string): string {
+    return text.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+}
+
 export function renderHistoryList(history: HistoryItem[], onLoad: (text: string) => void): void {
     els.historyList.innerHTML = '';
 
     if (history.length === 0) {
         els.historyList.innerHTML = `
             <div class="text-center py-8 border border-dashed border-neutral-800 rounded-lg text-neutral-600 text-sm">
-                No previous scripts found
+                Ainda não há guiões
             </div>
         `;
         els.clearHistoryBtn.classList.add('hidden');
@@ -314,10 +321,10 @@ export function renderHistoryList(history: HistoryItem[], onLoad: (text: string)
         };
         div.innerHTML = `
             <div class="flex flex-col text-left overflow-hidden mr-2">
-                <span class="text-gray-300 text-sm font-medium truncate font-mono">${item.preview}</span>
+                <span class="text-gray-300 text-sm font-medium truncate font-mono">${escapeHtml(item.preview)}</span>
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-500 text-xs">${item.date}</span>
-                    ${item.tag ? `<span class="text-[9px] font-bold bg-[#FFBB00]/10 text-[#FFBB00] px-1.5 py-0.5 rounded-full uppercase tracking-wider">${item.tag}</span>` : ''}
+                    <span class="text-gray-500 text-xs">${escapeHtml(item.date)}</span>
+                    ${item.tag ? `<span class="text-[9px] font-bold bg-[#FFBB00]/10 text-[#FFBB00] px-1.5 py-0.5 rounded-full uppercase tracking-wider">${escapeHtml(item.tag)}</span>` : ''}
                 </div>
             </div>
             <div class="flex-shrink-0">
